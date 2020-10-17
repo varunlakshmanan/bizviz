@@ -61,5 +61,7 @@ def train_model(X, y):
 def predict(file_path, sector, advertising, wages, fixed_costs, other_costs, online, time):
     X, y, test = preprocess_data(file_path, sector, advertising, wages, fixed_costs, other_costs, online)
     model = train_model(X, y)
+    temp = test
     for run in range(0, time):
-        model.predict(test)
+        temp = model.predict(temp)
+    return temp
