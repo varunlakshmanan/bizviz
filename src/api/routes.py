@@ -4,12 +4,13 @@ from revenue_model import predict
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def home():
     return "Hello World"
 
 
-@app.route('/getEstimatedRevenue', methods=['POST'])
+@app.route('http://localhost:5000/getEstimatedRevenue', methods=['POST'])
 def getEstimatedRevenue():
     file_path = request.json['file_path']
     sector = request.json['sector']
