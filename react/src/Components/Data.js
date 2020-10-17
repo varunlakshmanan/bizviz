@@ -5,6 +5,8 @@ import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import ReactFileReader from './ReactFileReader';
 import Chart from 'chart.js';
+import Dropzone from 'react-dropzone';
+import csv from 'csv';
 
 class Data extends Component {
   constructor(props) {
@@ -30,27 +32,39 @@ class Data extends Component {
   }
   _enterData(event) {
     event.preventDefault();
-    var body = JSON.stringify({
-      'time': this.state.time,
-      'advertising': this.state.advertising,
-      'wages': this.state.wages,
-      'fixed_costs': this.state.fixed_costs,
-      'other_costs': this.state.other_costs,
-      'online': this.state.online,
-      'sector':this.state.sector
-    })
-    console.log(body)
+    console.log(JSON.stringify({
+          'time': this.state.time,
+          'advertising': this.state.advertising,
+          'wages': this.state.wages,
+          'fixed_costs': this.state.fixed_costs,
+          'other_costs': this.state.other_costs,
+          'online': this.state.online,
+          'sector':this.state.sector,
+          'file_path': this.state.file
+        })) 
     fetch("http://localhost:5000/getEstimatedRevenue", {
         method: "POST",
-        headers: {
-            "Content-Type": "Projections",  
+        headers : {
+          'Content-Type': 'application/json',
+          'accept':'application/json'
         },
-        body
+        body : JSON.stringify({
+          'time': this.state.time,
+          'advertising': this.state.advertising,
+          'wages': this.state.wages,
+          'fixed_costs': this.state.fixed_costs,
+          'other_costs': this.state.other_costs,
+          'online': this.state.online,
+          'sector':this.state.sector,
+          'file_path': this.state.file
+        })
     }) .then(response => {
-        alert(response);
+        console.log(response.responseText)
+        console.log(response)
         return response.json();
     }) .then(res => {
             var result = res
+            console.log(result)
     }) .catch(function(error) {
         console.log('There has been a problem: ' + error.message);
         throw error;
@@ -79,15 +93,7 @@ class Data extends Component {
   handleOnlineChange(event) {
     this.setState({online: event.target.value});
   }
-  handleFiles = files => {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-        // Use reader.result
-        alert(reader.result)
-    }
-    reader.readAsText(files[0]);
-    this.setState({file: reader.result})
-  }
+  
 
 
 
@@ -140,7 +146,41 @@ class Data extends Component {
     //data = {"mm/dd/yy": Revenue 1, "mm/dd/yy": Revenue 2}
   }
 
+  onDrop(files) {
+
+    this.setState({ files });
+
+    var file = files[0];
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      csv.parse(reader.result, (err, data) => {
+
+        var userList = [];
+
+        for (var i = 0; i < data.length; i++) {
+          const month = data[i][0];
+          const advertising = data[i][1];
+          const wages = data[i][2];
+          const fixed_cost = data[i][3];
+          const other_cost = data[i][4];
+          const online = data[i][5];
+          const revenue = data[i][6];
+          const newUser = { "month": month, "advertising": advertising, "wages": wages, "fixed_cost": fixed_cost, "other_cost": other_cost, "online": online, "revenue": revenue};
+          userList.push(newUser);
+        };
+        this.setState({file: userList})
+        console.log(this.state.userList)
+      });
+      
+    };
+
+    reader.readAsBinaryString(file);
+  }
+
   render() {
+      const wellStyles = { maxWidth: 400, margin: '0 auto 10px' };
+      const fontSize = 5;
       return (
         <section id="data">
         <form onSubmit = {this._enterData}>
@@ -242,15 +282,17 @@ class Data extends Component {
                 <h1><span>CSV File</span></h1>
             </div>
 
-            <div className="nine columns main-col">
-              <div className="row item">
-                <ReactFileReader handleFiles = {this.handleFiles} fileTypes={'.csv'}>
-                  <button className='btn'>Upload</button>
-                </ReactFileReader>
+            <div align="center" oncontextmenu="return false">
+              <br /><br /><br />
+              <div className="dropzone">
+                <Dropzone accept=".csv" onDropAccepted={this.onDrop.bind(this)}>            
+                </Dropzone>
+                <br /><br /><br />
               </div>
+              <h2>Upload or drop your <font size={fontSize} color="#00A4FF">CSV</font><br /> file here.</h2>
             </div>
-            <input type="submit" value="Submit" />
           </div>
+          <input type="submit" value="Submit" />
         </form>
     </section>
     );
