@@ -1,16 +1,17 @@
 from flask import Flask
 from flask import request, jsonify
-from revenue_model import predict
+from revenue_model.revenue_model import predict
 
 app = Flask(__name__)
+
 
 @app.route('/')
 def home():
     return "Hello World"
 
 
-@app.route('http://localhost:5000/getEstimatedRevenue', methods=['POST'])
-def getEstimatedRevenue():
+@app.route('/http://localhost:5000/getEstimatedRevenue', methods=['POST'])
+def get_estimated_revenue():
     file_path = request.json['file_path']
     sector = request.json['sector']
     advertising = request.json['advertising']

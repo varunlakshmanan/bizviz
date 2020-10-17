@@ -1,8 +1,7 @@
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
-import GlassRegressor
-
+from revenue_model import GlassRegressor
 
 def preprocess_data(file_path, sector, advertising, wages, fixed_costs, other_costs, online):
     data = pd.read_csv(file_path)
