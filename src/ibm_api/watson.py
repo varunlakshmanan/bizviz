@@ -1,6 +1,6 @@
 import requests
 import json
-from ibm_watson_machine_learning import APIClient
+import ibm_watson_machine_learning
 from ibm_botocore.client import Config
 import ibm_boto3, os
 
@@ -18,13 +18,13 @@ def get_IAMP_token(API_KEY):
 def model(token):
     url = "https://us-south.ml.cloud.ibm.com/ml/v4/models?version=2020-09-01"
     wml_credentials = {"url": "https://us-south.ml.cloud.ibm.com", "token":token,}
-    client = APIClient(wml_credentials)
+    client = ibm_watson_machine_learning.APIClient(wml_credentials)
     space_id = "f728ba4f-98b4-4e75-ae16-5db95d988e79"
     client.set.default_space(space_id)
 
     metadata = {
-        client.repository.ModelMetaNames.NAME: 'Boston house price',
-        client.repository.ModelMetaNames.TYPE: 'scikit-learn_0.20',
+        client.repository.ModelMetaNames.NAME: 'IBM',
+        client.repository.ModelMetaNames.TYPE: 'fbprophet',
     }
 
     published_model = client.repository.store_model(
