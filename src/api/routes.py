@@ -1,9 +1,12 @@
 from flask import Flask
 from flask import request, jsonify
+from flask_cors import CORS, cross_origin
 from revenue_model.revenue_model import predict
 
 app = Flask(__name__)
+app.config["DEBUG"] = True
 
+cors = CORS(app)
 
 @app.route('/')
 def home():
