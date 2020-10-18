@@ -43,7 +43,14 @@ def get_estimated_revenue():
     else:
         next_year = data['year'].iloc[-1]
     next_month_year = str(next_month) + str(' ') + str(next_year)
-    projected_revenue = str(predict(file_path, sector, float(advertising), float(wages), float(fixed_costs), float(other_costs), online, float(time)))
+
+    advertising = float(advertising)
+    wages = float(wages)
+    fixed_costs = float(fixed_costs)
+    other_costs = float(other_costs)
+    time = float(time)
+
+    projected_revenue = str(predict(file_path, sector, advertising, wages, fixed_costs, other_costs, online, time))
     projection = {next_month_year: projected_revenue}
     dict = {
         'baseline': baseline,

@@ -88,6 +88,11 @@ def extrapolate_costs(X, time):
 
 
 def predict(file_path, sector, advertising, wages, fixed_costs, other_costs, online, time, timeout=3):
+    advertising = float(advertising)
+    wages = float(wages)
+    fixed_costs = float(fixed_costs)
+    other_costs = float(other_costs)
+    time = float(time)
     X, y, test = preprocess_data(file_path, sector, advertising, wages, fixed_costs, other_costs, online)
     model = train_model(X, y, timeout)
     if time == 1:
