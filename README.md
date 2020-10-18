@@ -4,7 +4,7 @@
 ### BizViz is a financial business visualization tool that gives small business owners insight into different ways to keep their business operating during difficult times like the COVID-19 global pandemic. Instead of having businesses collapse due to owners continuing to spend more money to keep themselves growing, our application takes that same monetary value and instead shows what would be a reasonable return if that money was invested into different types of stock market portfolios. All this data is then presented to the user to allow them to better gauge whether it would be worthwile to divert funds into investments while the pandemic is active to potentially make a profit to keep the business operating for longer.
 
 ## Some of the technologies we used include:
-![React]()
+![React](https://img.icons8.com/ios/150/000000/react-native.png)
 ![Flask]()
 ![IBM Watson]()
 ![SciKitLearn]()
