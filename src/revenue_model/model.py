@@ -5,7 +5,7 @@ from revenue_model.GlassRegressor import GlassRegressor
 
 
 def preprocess_data(file_path, sector, advertising, wages, fixed_costs, other_costs, online):
-    data = pd.read_csv(file_path)
+    data = pd.DataFrame(file_path)
     sectors = {  # from https://www.bls.gov/opub/mlr/2015/article/industry-employment-and-output-projections-to-2024.htm
         'Mining': 0.9,
         'Construction': 1.2,
@@ -25,7 +25,7 @@ def preprocess_data(file_path, sector, advertising, wages, fixed_costs, other_co
         'Agriculture': -0.5,
         'Other': 0.4
     }
-    data['online'] = [1 if item == 'online' else 0 for item in data['online']]
+    data['online'] = [1 if item == 'Online' else 0 for item in data['online']]
     data['physical'] = [1 if item == 0 else 0 for item in data['online']]
     data['sector'] = sectors[sector]
     features = ['advertising', 'wages', 'fixed_costs', 'other_costs', 'online', 'physical', 'sector']
@@ -34,7 +34,7 @@ def preprocess_data(file_path, sector, advertising, wages, fixed_costs, other_co
 
     test_online = 0
     test_physical = 1
-    if online == 'online':
+    if online == 'Online':
         test_online = 1
         test_physical = 0
     test = pd.DataFrame(data={
@@ -87,13 +87,11 @@ def extrapolate_costs(X, time):
     return extrapolated_data
 
 
-def predict(file_path, sector, advertising, wages, fixed_costs, other_costs, online, time, timeout=1):
+def predict(file_path, sector, advertising, wages, fixed_costs, other_costs, online, time, timeout=3):
     X, y, test = preprocess_data(file_path, sector, advertising, wages, fixed_costs, other_costs, online)
     model = train_model(X, y, timeout)
     if time == 1:
-        return model.predict(test)
+        return model.predict(test)[0]
     else:
-        return model.predict(extrapolate_costs(X, time))
+        return model.predict(extrapolate_costs(X, time))[0]
 
-
-print(predict('D:/Downloads/testFile_hackathon.csv', 'Mining', 12, 12, 12, 12, 'online', 12, 5))

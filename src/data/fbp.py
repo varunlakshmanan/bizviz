@@ -1,9 +1,9 @@
 from fbprophet import Prophet
 import datetime
-from dateutil.easter import easter
+#from dateutil.easter import easter
 import pandas as pd
 from dateutil.relativedelta import relativedelta
-from yahoo_finance import Share
+#from yahoo_finance import Share
 import yfinance as yf
 
 def get_list_of_prices(stock_list, num_of_months):
