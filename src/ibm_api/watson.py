@@ -4,7 +4,8 @@ import ibm_watson_machine_learning
 from ibm_botocore.client import Config
 import ibm_boto3, os
 
-API_KEY = 'TckMpw8wWwh7c8-zOsN6ACB6HOqbISxuGRWuUPgjKxEz'
+#API_KEY = os.environ['IBM_API_KEY']
+API_KEY = "TckMpw8wWwh7c8-zOsN6ACB6HOqbISxuGRWuUPgjKxEz"
 
 def get_IAMP_token(API_KEY):
     authentication_url = "https://iam.cloud.ibm.com/identity/token"
@@ -16,20 +17,32 @@ def get_IAMP_token(API_KEY):
     return IAM_access_token
 
 def model(token):
-    url = "https://us-south.ml.cloud.ibm.com/ml/v4/models?version=2020-09-01"
-    wml_credentials = {"url": "https://us-south.ml.cloud.ibm.com", "token":token,}
+    wml_credentials = {"url": "https://us-south.ml.cloud.ibm.com", "instance_id" : "wml_local", 'username':'ppusarla3@gatech.edu', 'password': "hf3729hggn29ghD", "version" : "3.0.0"}
     client = ibm_watson_machine_learning.APIClient(wml_credentials)
-    space_id = "f728ba4f-98b4-4e75-ae16-5db95d988e79"
-    client.set.default_space(space_id)
-
-    metadata = {
-        client.repository.ModelMetaNames.NAME: 'IBM',
-        client.repository.ModelMetaNames.TYPE: 'fbprophet',
-    }
-
-    published_model = client.repository.store_model(
-        model=model,
-        meta_props=metadata,)
+    # print("Bob")
+    # space_id = os.environ['IBM_space_id']
+    # client.set.default_space(space_id)
+    #
+    # sofware_spec_uid = client.software_specifications.get_id_by_name("spss-modeler_18.2")
+    #
+    # metadata = {
+    #     client.repository.ModelMetaNames.NAME: 'IBM',
+    #     client.repository.ModelMetaNames.TYPE: 'fbprophet',
+    #     client.repository.ModelMetaNames.SOFTWARE_SPEC_UID: sofware_spec_uid
+    # }
+    #
+    # published_model = client.repository.store_model(
+    #     model=model,
+    #     meta_props=metadata,)
+    # model_uid = client.repository.get_model_uid(published_model)
+    # models_details = client.repository.list_models()
+    #
+    # metadata = {
+    #     client.deployments.ConfigurationMetaNames.NAME: "Virtual deployment of Stock forecasting model",
+    #     client.deployments.ConfigurationMetaNames.VIRTUAL: {"export_format": "coreml"}
+    # }
+    #
+    # created_deployment = client.deployments.create(model_uid, meta_props=metadata)
 
 token = get_IAMP_token(API_KEY)
 print(token)

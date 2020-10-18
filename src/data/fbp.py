@@ -65,11 +65,11 @@ def get_money(stock_list, list_of_prices, money):
         count+=1
     return dict
 
-# num_of_months = 5
+num_of_months = 5
 # low_risk_stock_list = ['TDTF', 'BIV', 'PZA']
-# medium_risk_stock_list = ['GOOGL', 'URI', 'MSFT']
+medium_risk_stock_list = ['GOOGL', 'URI', 'MSFT']
 # high_risk_stock_list = ['TSLA', 'AMZN', 'NVDA', 'AAPL']
-# list_of_prices = get_list_of_prices(medium_risk_stock_list, num_of_months)
+list_of_prices = get_list_of_prices(medium_risk_stock_list, num_of_months)
 # print(list_of_prices)
-# money = get_money(medium_risk_stock_list, list_of_prices, 50)
-# print(money)
+money = get_money(medium_risk_stock_list, list_of_prices, 50)
+print(money)

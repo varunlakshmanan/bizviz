@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request, jsonify
 from flask_cors import CORS, cross_origin
-from revenue_model.model import predict
+from src.revenue_model.model import predict
 from src.ibm_api.stock_data import get_stock_data_yf
 from src.data.fbp import get_list_of_prices,get_money
 
@@ -42,6 +42,7 @@ def get_stock_data():
     online = request.json['online']
     time = request.json['time']
 
+    time = int(time)
     money = advertising + wages + fixed_costs + other_costs
     list = []
     low_risk_stock_list = ['TDTF', 'BIV', 'PZA']

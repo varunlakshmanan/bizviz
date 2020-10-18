@@ -2,6 +2,7 @@ import yfinance as yf
 import datetime
 from dateutil.relativedelta import relativedelta
 import pandas as pd
+import os
 import quandl
 
 
@@ -22,7 +23,7 @@ def get_stock_data_yf(stock_list):
 
 
 def get_stock_data_quandl(stock_list):
-    quandl.ApiConfig.api_key ="E2ifjJBjigog3uqSzn1X"
+    quandl.ApiConfig.api_key = os.environ['Quandl_API_CONFIG_KEY']
     df = pd.DataFrame()
     for stock in stock_list:
         data = quandl.get_table('WIKI/PRICES',
@@ -35,6 +36,6 @@ def get_stock_data_quandl(stock_list):
 
 
 # low_risk_stock_list = ['TDTF', 'BIV', 'PZA']
-# medium_risk_stock_list = ['GOOGL', 'URI', 'MSFT']
+#medium_risk_stock_list = ['GOOGL', 'URI', 'MSFT']
 # high_risk_stock_list = ['TSLA', 'AMZN', 'NVDA', 'AAPL']
-# get_stock_data_yf(medium_risk_stock_list)
+#get_stock_data_yf(medium_risk_stock_list)
