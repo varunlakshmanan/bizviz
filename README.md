@@ -6,7 +6,7 @@
 ## Some of the technologies we used include:
 ![React](https://img.icons8.com/ios/150/000000/react-native.png)
 ![Flask](https://www.olirowan.xyz/static/images/icons/flask-plain.svg)
-![IBM Watson]()
+![IBM Watson](https://github.com/varunlakshmanan/hackgt7/blob/main/watson3.png)
 ![SciKitLearn]()
 
 ## How it works ##
