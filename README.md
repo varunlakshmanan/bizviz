@@ -18,3 +18,10 @@ Taking into account the projected revenue, we created another ML model to foreca
 The custom stock portfolios have 3 categories: Low Risk, Medium Risk, and High Risk. The low risk is composed of non-volatile options such as index funds and bonds, while the high risk option is comprised of stocks with high volume, high market cap, and other indicators of volatile stocks.
 
 The predicted revenue, and the predicted growth of the 3 suggested stock portfolios are plotted on a graph to provide the business owner with a simple and effective way to decide whether it could potentially be beneficial if they invested in the portfolio instead of putting that into the business. 
+
+
+## Team: ##
+* *Yash Patel ([@yashp121](https://github.com/yashp121))*
+* *Nishant Ravi ([@NRavi01](https://github.com/NRavi01))*
+* *Varun Lakshmanan ([@varunlakshmanan](https://github.com/varunlakshmanan))
+* *Pranav Pusarla([@PranavPusarla](https://github.com/PranavPusarla))*
