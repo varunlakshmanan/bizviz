@@ -4,8 +4,7 @@ import ibm_watson_machine_learning
 from ibm_botocore.client import Config
 import ibm_boto3, os
 
-#API_KEY = os.environ['IBM_API_KEY']
-API_KEY = "TckMpw8wWwh7c8-zOsN6ACB6HOqbISxuGRWuUPgjKxEz"
+API_KEY = os.environ['IBM_API_KEY']
 
 def get_IAMP_token(API_KEY):
     authentication_url = "https://iam.cloud.ibm.com/identity/token"
