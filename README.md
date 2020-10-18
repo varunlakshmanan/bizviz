@@ -11,7 +11,7 @@
 
 ## How it works ##
 
-When the user first visits the site, they will be prompted to enter some data about the business: ENTER THAT HERE. Then, the user will submit an excel/csv file that has the total companies monthly costs (fixed + variable costs, advertising, wages) and their monthly revenue for the past 10 years. This data is then parsed and processed for training of our machine learning algorithm that is chosen from an ensemble of models that is optimized for our data. This model then outputs predicted revenue based on the business' performance.
+When the user first visits the site, they will be prompted to enter some data about the business, including costs they spend for wages, advertising, fixed costs, and other miscellaneous costs, as well as whether the business is run online or in person. Then, the user will submit an excel/csv file that has the total companies monthly costs (fixed + variable costs, advertising, wages) and their monthly revenue for the past 10 years. This data is then parsed and processed for training of our machine learning algorithm that is chosen from an ensemble of models that is optimized for our data. This model then outputs predicted revenue based on the business' performance.
 
 Taking into account the projected revenue, we created another ML model to forecast the projected values of simulated portfolios if the specified amount was invested in the stock market instead. We then used the IBM Watson cloud to upload and deploy our ML model so it can be used for other applications in the future. This gives us great flexibility in the predictions we wish to perform.
 
