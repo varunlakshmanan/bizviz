@@ -27,22 +27,28 @@ def get_estimated_revenue():
     other_costs = request.json['other_costs']
     online = request.json['online']
     time = request.json['time']
-    return jsonify(str(predict(file_path, sector, advertising, wages, fixed_costs, other_costs, online, time)))
 
-# @app.route('/getPlotData', methods=['GET'])
-# def get_plot_data():
-#     file_path = request.json['file_path']
-#     sector = request.json['sector']
-#     advertising = request.json['advertising']
-#     wages = request.json['wages']
-#     fixed_costs = request.json['fixed_costs']
-#     other_costs = request.json['other_costs']
-#     online = request.json['online']
-#     time = request.json['time']
-#     data = pd.read_csv(file_path)
-#     dict = dict(zip(data['month'], data['revenue']))
-#     X['advertising'].iloc[-1]
-#     dict['']
+    data = pd.DataFrame(file_path)
+    month_year = []
+    for index in data['month']:
+        month_year.append(str(data['month'][index]) + str(data['year'][index]))
+    baseline = dict(zip(month_year, data['revenue']))
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    last_month = data['month'].iloc[-1]
+    next_month = months[(months.index(last_month) + 1) % 12]
+    if next_month == 'January':
+        next_year = data['year'].iloc[-1] + 1
+    else:
+        next_year = data['year'].iloc[-1]
+    next_month_year = str(next_month) + str('') + str(next_year)
+    projected_revenue = str(predict(file_path, sector, advertising, wages, fixed_costs, other_costs, online, time))
+    projection = {next_month_year: projected_revenue}
+    dict = {
+        'baseline': baseline,
+        'projection': projection
+    }
+    return jsonify(dict)
+
 
 @app.route('/getStockData', methods=['POST'])
 def get_stock_data():
