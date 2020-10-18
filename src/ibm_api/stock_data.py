@@ -19,7 +19,7 @@ def get_stock_data_yf(stock_list):
         df = pd.concat((df, stock_data), axis=1)
     df.to_csv('../data/stock_data.csv')
 
-low_risk_stock_list = ['TDTF', 'BIV', 'PZA']
-medium_risk_stock_list = ['GOOGL', 'URI', 'MSFT']
-high_risk_stock_list = ['TSLA', 'AMZN', 'NVDA', 'AAPL']
-get_stock_data_yf(high_risk_stock_list)
+# low_risk_stock_list = ['TDTF', 'BIV', 'PZA']
+# medium_risk_stock_list = ['GOOGL', 'URI', 'MSFT']
+# high_risk_stock_list = ['TSLA', 'AMZN', 'NVDA', 'AAPL']
+# get_stock_data_yf(high_risk_stock_list)

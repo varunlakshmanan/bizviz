@@ -88,22 +88,22 @@ class Data extends Component {
         console.log(response)
         return response.json();
     }) .then(res => {
-          var baseline = []
-          var projection = []
+          var baseline = {}
+          var projection = {}
           for (var key in res) {
             var curr_value = key
             if (key === "Baseline") {
               for (var timekey in res[key]) {
                 var time = timekey
                 var value = res[key][timekey]
-                baseline.push(time, value)
+                baseline[time] = value
               }
             }
             else {
               for (var timekey in res[key]) {
                 var time = timekey
                 var value = res[key][timekey]
-                projection.push(time, value)
+                projection[time] = value
               }
             }
           }
@@ -113,62 +113,65 @@ class Data extends Component {
         console.log('There has been a problem: ' + error.message);
         throw error;
     })
-    // fetch("http://localhost:5000/getStockData", {
-    //     method: "POST",
-    //     headers : {
-    //       'Content-Type': 'application/json',
-    //       'accept':'application/json'
-    //     },
-    //     body : JSON.stringify({
-    //       'time': this.state.time,
-    //       'advertising': this.state.advertising,
-    //       'wages': this.state.wages,
-    //       'fixed_costs': this.state.fixed_costs,
-    //       'other_costs': this.state.other_costs,
-    //       'online': this.state.online,
-    //       'sector':this.state.sector,
-    //       'file_path': this.state.file
-    //     })
-    // }) .then(response => {
-    //     console.log(response)
-    //     return response.json();
-    // }) .then(res => {
-    //         var portfolio1 = []
-    //         var portfolio2 = []
-    //         var portfolio3 = []
-    //         for (var portfolio in res) {
-    //           var curr_value = portfolio
-    //           if (curr_value === "low_value") {
-    //             for (var key in res[curr_value]) {
-    //               var month = this.months[key - 1]
-    //               var value = res[curr_value][key]
-    //               portfolio1.push(month, value)
-    //             }
-    //           }
-    //           else {
-    //             if ((curr_value === "middle_value")) {
-    //               for (var key in res[curr_value]) {
-    //                 var month = this.months[key - 1]
-    //                 var value = res[curr_value][key]
-    //                 portfolio2.push(month, value)
-    //               }
-    //             }
-    //             else {
-    //               for (var key in res[curr_value]) {
-    //                 var month = this.months[key - 1]
-    //                 var value = res[curr_value][key]
-    //                 portfolio3.push(month, value)
-    //               }
-    //             }
-    //           }
-    //         }
-    //         this.changePortfolio1(portfolio1);
-    //         this.changePortfolio2(portfolio2);
-    //         this.changePortfolio3(portfolio3);
-    // }) .catch(function(error) {
-    //     console.log('There has been a problem: ' + error.message);
-    //     throw error;
-    // })
+    fetch("http://localhost:5000/getStockData", {
+        method: "POST",
+        headers : {
+          'Content-Type': 'application/json',
+          'accept':'application/json'
+        },
+        body : JSON.stringify({
+          'time': this.state.time,
+          'advertising': this.state.advertising,
+          'wages': this.state.wages,
+          'fixed_costs': this.state.fixed_costs,
+          'other_costs': this.state.other_costs,
+          'online': this.state.online,
+          'sector':this.state.sector,
+          'file_path': this.state.file
+        })
+    }) .then(response => {
+        console.log(response)
+        return response.json();
+    }) .then(res => {
+            var portfolio1 = {}
+            var portfolio2 = {}
+            var portfolio3 = {}
+            for (var portfolio in res) {
+              var curr_value = portfolio
+              if (curr_value === "low_risk") {
+                for (var key in res[curr_value]) {
+                  var month = key
+                  var value = res[curr_value][key]
+                  portfolio1[month] = value
+                }
+              }
+              else {
+                if ((curr_value === "medium_risk")) {
+                  for (var key in res[curr_value]) {
+                    var month = key
+                    var value = res[curr_value][key]
+                    portfolio2[month] =  value
+                  }
+                }
+                else {
+                  for (var key in res[curr_value]) {
+                    var month = key
+                    var value = res[curr_value][key]
+                    portfolio3[month]=  value
+                  }
+                }
+              }
+            }
+            this.changePortfolio1(portfolio1);
+            console.log(this.state.port1)
+            this.changePortfolio2(portfolio2);
+            console.log(this.state.port2)
+            this.changePortfolio3(portfolio3);
+            console.log(this.state.port3)
+    }) .catch(function(error) {
+        console.log('There has been a problem: ' + error.message);
+        throw error;
+    })
   };
 
   handleTimeChange(event) {
