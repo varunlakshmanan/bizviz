@@ -7,6 +7,7 @@ from src.data.fbp import get_list_of_prices,get_money,predict_price
 import pandas as pd
 import pickle
 import datetime
+from dateutil.relativedelta import relativedelta
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -61,8 +62,10 @@ def get_estimated_revenue():
     time = float(time)
 
     projected_revenue = str(predict(file_path, sector, advertising, wages, fixed_costs, other_costs, online, time))
+    time = int(time)
     today = "1 " + next_month_year
     d = datetime.datetime.strptime(today, '%d %B %Y')
+    d = d + relativedelta(months=(time-1))
     next_month_year = datetime.datetime.strftime(d, '%m-%d-%Y')
     next_month_year += " GMT"
     projection = {next_month_year: projected_revenue}
