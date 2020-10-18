@@ -95,24 +95,11 @@ def build_models(is_classifier):
     else:
         decision_tree = DecisionTreeRegressor()
         random_forest = RandomForestRegressor()
-        adaboost = AdaBoostRegressor()
         bagging = BaggingRegressor()
-        extra_trees = ExtraTreesRegressor()
         gradient_boosting = GradientBoostingRegressor()
-        gaussian_process_regressor = GaussianProcessRegressor()
-        lasso = Lasso()
-        passive_aggressive = PassiveAggressiveRegressor()
-        ridge = Ridge()
-        sgd = SGDRegressor()
-        svr = SVR()
-        nu_svr = NuSVR()
-        linear_svr = LinearSVR()
-        k_neighbors = KNeighborsRegressor()
         xgb = XGBRegressor()
         lgbm = LGBMRegressor()
 
-        estimators = [decision_tree, random_forest, adaboost, bagging, extra_trees, gradient_boosting,
-                      gaussian_process_regressor, lasso, passive_aggressive, ridge, sgd, svr, nu_svr, linear_svr,
-                      k_neighbors, xgb, lgbm]
+        estimators = [decision_tree, random_forest, bagging, gradient_boosting, xgb, lgbm]
 
     return estimators

@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request, jsonify
 from flask_cors import CORS, cross_origin
-from src.revenue_model.revenue_model import predict
+from revenue_model.model import predict
 from src.ibm_api.stock_data import get_stock_data_yf
 from src.data.fbp import get_list_of_prices,get_money
 

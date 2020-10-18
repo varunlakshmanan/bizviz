@@ -2,6 +2,7 @@ from itertools import combinations
 from sklearn.ensemble import VotingClassifier
 from sklearn.ensemble import VotingRegressor
 from sklearn.metrics import roc_auc_score
+from sklearn.metrics import mean_squared_error
 
 best_voting_estimator = []
 
@@ -54,16 +55,16 @@ def ensemble_models(optimized_estimators, x_train, y_train, x_test, y_test, is_c
             estimator_list = list(estimator_dict.items())
             voting_estimators.append(VotingRegressor(estimator_list))
 
-        max_auc = -1
+        max_score = -1
 
         # Find the voting regressor with the highest AUC
         for voting_estimator in voting_estimators:
             voting_estimator.fit(x_train, y_train)
             y_predictions = voting_estimator.predict(x_test)
-            auc = roc_auc_score(y_test, y_predictions)
+            score = mean_squared_error(y_test.values, y_predictions)
 
-            if auc > max_auc:
+            if score > max_score:
                 best_voting_estimator = voting_estimator
-                max_auc = auc
+                max_score = score
 
         return best_voting_estimator
