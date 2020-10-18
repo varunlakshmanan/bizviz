@@ -103,6 +103,7 @@ def get_stock_data():
         list_of_prices.append(list_of_projected)
     low_risk = get_money(stock_list=low_risk_stock_list, list_of_prices=list_of_prices, money=money)
     dict['low_risk'] = low_risk
+    print("Low Risk Portfolio finished...")
     list_of_prices = []
     for stock in medium_risk_stock_list:
         with open('../models/' + stock + '.pkl', 'rb') as f:
@@ -111,6 +112,7 @@ def get_stock_data():
         list_of_prices.append(list_of_projected)
     medium_risk = get_money(stock_list=medium_risk_stock_list, list_of_prices=list_of_prices, money=money)
     dict['medium_risk'] = medium_risk
+    print("Medium Risk Portfolio finished...")
     # get_stock_data_yf(medium_risk_stock_list)
     # list_of_prices = get_list_of_prices(medium_risk_stock_list, time)
     # medium_risk = get_money(stock_list=medium_risk_stock_list, list_of_prices=list_of_prices, money=money)
@@ -127,6 +129,7 @@ def get_stock_data():
     # list_of_prices = get_list_of_prices(high_risk_stock_list, time)
     # high_risk = get_money(stock_list=high_risk_stock_list, list_of_prices=list_of_prices, money=money)
     # dict['high_risk'] = high_risk
+    print(dict)
     return dict
 
 if __name__ == '__main__':

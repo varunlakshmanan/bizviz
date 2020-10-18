@@ -34,12 +34,23 @@ def get_list_of_prices(stock_list, num_of_months):
         future_data = model.make_future_dataframe(periods=((num_of_months+1)*30))
         forecast = model.predict(future_data)
         forecasted_price = forecast[['ds', 'yhat']]
+        print(forecasted_price)
+        #start = datetime.datetime.strptime("Dec 1 2019", '%b %d %Y')
         today = datetime.datetime.now()
+        #diff_months = (today.year - start.year) * 12 + (today.month - start.month)
+        #num_of_months += diff_months
         for i in range(num_of_months):
-            future = today + relativedelta(months=i + 1)
+            future = today + relativedelta(months=i+1)
+            #tfuture_df = future
+            tfuture = future.strftime("%Y-%m-01")
+            #print(type(forecasted_price[forecasted_price['ds'] == tfuture]))
+            # while (forecasted_price[forecasted_price['ds'] == tfuture].empty):
+            #     tfuture_df = tfuture_df + relativedelta(days=1)
+            #     tfuture = tfuture_df.strftime("%Y-%m-%d")
+                #print(tfuture)
+            # print(forecasted_price[forecasted_price['ds'] == tfuture])
+            value = forecasted_price[forecasted_price['ds'] == tfuture].values[0][1]
             future = future.strftime("%m-01-%Y")
-            # future += "-01"
-            value = forecasted_price[forecasted_price['ds'] == future].values[0][1]
             future += ' GMT'
             list_of_projected[future] = value
         list_of_prices.append(list_of_projected)
