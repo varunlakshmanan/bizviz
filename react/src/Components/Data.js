@@ -109,6 +109,8 @@ class Data extends Component {
           }
           this.changeBaseline(baseline);
           this.changeProjection(projection);
+          console.log(this.baseline);
+          console.log(this.projection);
     }) .catch(function(error) {
         console.log('There has been a problem: ' + error.message);
         throw error;
@@ -234,11 +236,11 @@ class Data extends Component {
           const other_cost = data[i][5];
           const online = data[i][6];
           const revenue = data[i][7];
-          const newUser = { "year": year, "month": month, "advertising": advertising, "wages": wages, "fixed_cost": fixed_cost, "other_cost": other_cost, "online": online, "revenue": revenue};
+          const newUser = { "year": year, "month": month, "advertising": advertising, "wages": wages, "fixed_costs": fixed_cost, "other_costs": other_cost, "online": online, "revenue": revenue};
           userList.push(newUser);
         };
         this.setState({file: userList})
-        console.log(this.state.userList)
+        console.log(this.state.file)
       });
       
     };
