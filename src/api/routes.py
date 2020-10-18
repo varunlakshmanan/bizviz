@@ -3,7 +3,8 @@ from flask import request, jsonify
 from flask_cors import CORS, cross_origin
 from src.revenue_model.model import predict
 from src.ibm_api.stock_data import get_stock_data_yf
-from src.data.fbp import get_list_of_prices,get_money,predict_price
+#from src.data.fbp import get_list_of_prices,get_money,predict_price
+from src.data.test_fbp import get_list_of_prices,get_money, predict_price
 import pandas as pd
 import pickle
 import datetime

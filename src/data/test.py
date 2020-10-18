@@ -1,7 +1,8 @@
 import requests
 import pandas as pd
 from src.ibm_api.stock_data import get_stock_data_yf
-from src.data.fbp import get_list_of_prices,get_money, predict_price
+#from src.data.fbp import get_list_of_prices,get_money, predict_price
+from src.data.test_fbp import get_list_of_prices,get_money, predict_price
 import pickle
 import datetime
 from dateutil.relativedelta import relativedelta
