@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ApexChart from './ApexChart';
 
 class Portfolio extends Component {
   render() {
@@ -36,6 +37,7 @@ class Portfolio extends Component {
 
           </div>
         </div>
+        <ApexChart/>
       </section>
     );
   }

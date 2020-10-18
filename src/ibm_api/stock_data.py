@@ -3,7 +3,6 @@ import datetime
 from dateutil.relativedelta import relativedelta
 import pandas as pd
 import os
-import quandl
 
 
 def get_stock_data_yf(stock_list):
@@ -20,20 +19,6 @@ def get_stock_data_yf(stock_list):
         print(stock_data)
         df = pd.concat((df, stock_data), axis=1)
     df.to_csv('../data/stock_data.csv')
-
-
-def get_stock_data_quandl(stock_list):
-    quandl.ApiConfig.api_key = os.environ['Quandl_API_CONFIG_KEY']
-    df = pd.DataFrame()
-    for stock in stock_list:
-        data = quandl.get_table('WIKI/PRICES',
-                                ticker=stock,
-                                qopts={'columns': ['date', 'open', 'high', 'low', 'close']},
-                                paginate=True)
-        data.columns = ['Date', 'Open', 'High', 'Low', 'Close']
-        df = pd.concat((df, data), axis=1)
-    df.to_csv('../data/stock_data_quandl.csv')
-
 
 # low_risk_stock_list = ['TDTF', 'BIV', 'PZA']
 #medium_risk_stock_list = ['GOOGL', 'URI', 'MSFT']

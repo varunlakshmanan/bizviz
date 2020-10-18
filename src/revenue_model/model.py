@@ -95,5 +95,3 @@ def predict(file_path, sector, advertising, wages, fixed_costs, other_costs, onl
     else:
         return model.predict(extrapolate_costs(X, time))
 
-
-print(predict('D:/Downloads/testFile_hackathon.csv', 'Mining', 12, 12, 12, 12, 'online', 12, 5))

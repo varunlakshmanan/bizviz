@@ -42,7 +42,34 @@ class Data extends Component {
           'sector':this.state.sector,
           'file_path': this.state.file
         })) 
-    fetch("http://localhost:5000/getEstimatedRevenue", {
+    // fetch("http://localhost:5000/getEstimatedRevenue", {
+    //     method: "POST",
+    //     headers : {
+    //       'Content-Type': 'application/json',
+    //       'accept':'application/json'
+    //     },
+    //     body : JSON.stringify({
+    //       'time': this.state.time,
+    //       'advertising': this.state.advertising,
+    //       'wages': this.state.wages,
+    //       'fixed_costs': this.state.fixed_costs,
+    //       'other_costs': this.state.other_costs,
+    //       'online': this.state.online,
+    //       'sector':this.state.sector,
+    //       'file_path': this.state.file
+    //     })
+    // }) .then(response => {
+    //     console.log(response.responseText)
+    //     console.log(response)
+    //     return response.json();
+    // }) .then(res => {
+    //         var result = res
+    //         console.log(result)
+    // }) .catch(function(error) {
+    //     console.log('There has been a problem: ' + error.message);
+    //     throw error;
+    // })
+    fetch("http://localhost:5000/getStockData", {
         method: "POST",
         headers : {
           'Content-Type': 'application/json',
@@ -94,57 +121,6 @@ class Data extends Component {
     this.setState({online: event.target.value});
   }
   
-
-
-
-  createChart(ctx) {
-  let color = null;
-  if (this.performance[this.performance.length - 1] < 1) {
-    color = '#ff7675';
-  } else {
-    color = '#55efc4';
-  }
-  const chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: this.labels,
-      datasets: [
-        {
-          label: 'Portfolio Performance',
-          data: this.performance,
-          fill: false,
-          borderColor: color
-        }
-      ]
-    },
-    options: {
-      scales: {
-        xAxes: [{
-          ticks: {
-            autoSkip: true,
-            maxRotation: 0,
-            minRotation: 0
-          }
-        }],
-        yAxes: [{
-          ticks: {
-            // Include a dollar sign in the ticks
-            callback: function (value, index, values) {
-              return '$' + value;
-            }
-          }
-        }]
-      }
-    }
-  });
-    return chart;
-  }
-  composeChart() {
-    this.performance = []
-    this.labels = []
-    var data_array = this.data
-    //data = {"mm/dd/yy": Revenue 1, "mm/dd/yy": Revenue 2}
-  }
 
   onDrop(files) {
 

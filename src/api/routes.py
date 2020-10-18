@@ -17,8 +17,6 @@ def home():
 
 @app.route('/getEstimatedRevenue', methods=['POST'])
 def get_estimated_revenue():
-    print(request)
-    print(request.json())
     file_path = request.json['file_path']
     sector = request.json['sector']
     advertising = request.json['advertising']
@@ -29,16 +27,14 @@ def get_estimated_revenue():
     time = request.json['time']
     return jsonify(str(predict(file_path, sector, advertising, wages, fixed_costs, other_costs, online, time)))
 
-@app.route('/getStockData', methods=['GET'])
+@app.route('/getStockData', methods=['POST'])
 def get_stock_data():
-    print(request)
-    print(request.json())
     file_path = request.json['file_path']
     sector = request.json['sector']
-    advertising = request.json['advertising']
-    wages = request.json['wages']
-    fixed_costs = request.json['fixed_costs']
-    other_costs = request.json['other_costs']
+    advertising = float(request.json['advertising'])
+    wages = float(request.json['wages'])
+    fixed_costs = float(request.json['fixed_costs'])
+    other_costs = float(request.json['other_costs'])
     online = request.json['online']
     time = request.json['time']
 
