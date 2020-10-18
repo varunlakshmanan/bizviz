@@ -23,5 +23,5 @@ The predicted revenue, and the predicted growth of the 3 suggested stock portfol
 ## Team: ##
 * *Yash Patel ([@yashp121](https://github.com/yashp121))*
 * *Nishant Ravi ([@NRavi01](https://github.com/NRavi01))*
-* *Varun Lakshmanan ([@varunlakshmanan](https://github.com/varunlakshmanan))
+* *Varun Lakshmanan ([@varunlakshmanan](https://github.com/varunlakshmanan))*
 * *Pranav Pusarla([@PranavPusarla](https://github.com/PranavPusarla))*
