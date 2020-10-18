@@ -19,13 +19,11 @@ class Header extends Component {
             <li className="current"><a className="smoothscroll" href="#home">Home</a></li>
             <li><a className="smoothscroll" href="#about">Description</a></li>
 	         <li><a className="smoothscroll" href="#data">Data</a></li>
-            <li><a className="smoothscroll" href="#portfolio">Results</a></li>
-            <li><a className="smoothscroll" href="#contact">Contact</a></li>
+            <li><a className="smoothscroll" href="#results">Results</a></li>
          </ul>
       </nav>
 
       <div className="row banner">
-      
          <div className="banner-text">
             <h1 className="responsive-headline">BizViz</h1>
             <h3>Made by Nishant Ravi, Varun Lakshmanan, Yash Patel, Pranav Pusarla.</h3>

@@ -8,6 +8,9 @@ import Chart from 'chart.js';
 import Dropzone from 'react-dropzone';
 import Portfolio from './Portfolio';
 import csv from 'csv';
+import ApexChart from './ApexChart';
+import ReactLoading from 'react-loading';
+
 
 class Data extends Component {
   constructor(props) {
@@ -28,6 +31,8 @@ class Data extends Component {
     ]
 
     this.state = {
+      step: 'form',
+      submitted: false,
       time: 10, 
       advertising: 0,
       wages: 0,
@@ -38,10 +43,42 @@ class Data extends Component {
       file: null,
       baseline: null, 
       projection: null,
-      port1: {1: "5", 2:"7"}, 
+      port1:  [
+        {
+          name: "Series 1",
+          data: [
+            {
+              x: "02-10-2017 GMT",
+              y: 34
+            },
+            {
+              x: "02-11-2017 GMT",
+              y: 43
+            },
+            {
+              x: "02-12-2017 GMT",
+              y: 31
+            },
+            {
+              x: "02-13-2017 GMT",
+              y: 43
+            },
+            {
+              x: "02-14-2017 GMT",
+              y: 33
+            },
+            {
+              x: "02-15-2017 GMT",
+              y: 52
+            }
+          ]
+        }
+      ], 
       port2: null, 
       port3: null
     }
+
+    this.backButton = this.backButton.bind(this);
     this.handleTimeChange = this.handleTimeChange.bind(this);
     this.handleAdvertisingChange = this.handleAdvertisingChange.bind(this);
     this.handleWagesChange = this.handleWagesChange.bind(this);
@@ -54,10 +91,12 @@ class Data extends Component {
     this.changePortfolio3 = this.changePortfolio3.bind(this);
     this.changeBaseline = this.changeBaseline.bind(this);
     this.changeProjection = this.changeProjection.bind(this);
+    this.handleSubmitChange = this.handleSubmitChange.bind(this);
     this._enterData = this._enterData.bind(this);
   }
   _enterData(event) {
     event.preventDefault();
+    this.setState({step: 'loading'});
     console.log(JSON.stringify({
           'time': this.state.time,
           'advertising': this.state.advertising,
@@ -89,29 +128,37 @@ class Data extends Component {
         console.log(response)
         return response.json();
     }) .then(res => {
-          var baseline = {}
-          var projection = {}
+
+          var baseline_list = []
+          var projection_list = []
+          console.log(res)
           for (var key in res) {
-            var curr_value = key
-            if (key === "Baseline") {
+            if (key === "baseline") {
               for (var timekey in res[key]) {
                 var time = timekey
-                var value = res[key][timekey]
-                baseline[time] = value
+                for (var timePoint in res[key][timekey]) {
+                  var new_dict = {}
+                  new_dict["x"] = timePoint
+                  new_dict["y"] = res[key][timekey][timePoint]
+                  baseline_list.push(new_dict)
+                }
               }
             }
             else {
               for (var timekey in res[key]) {
                 var time = timekey
-                var value = res[key][timekey]
-                projection[time] = value
+                console.log(res[key][timekey])
+                var new_dict = {}
+                new_dict["x"] = time
+                new_dict["y"] = res[key][timekey]
+                projection_list.push(new_dict)
               }
             }
           }
-          this.changeBaseline(baseline);
-          this.changeProjection(projection);
-          console.log(this.baseline);
-          console.log(this.projection);
+          this.changeBaseline(baseline_list);
+          this.changeProjection(projection_list);
+          console.log(this.state.baseline);
+          console.log(this.state.projection);
     }) .catch(function(error) {
         console.log('There has been a problem: ' + error.message);
         throw error;
@@ -136,31 +183,44 @@ class Data extends Component {
         console.log(response)
         return response.json();
     }) .then(res => {
-            var portfolio1 = {}
-            var portfolio2 = {}
-            var portfolio3 = {}
+            var portfolio1 = []
+            var portfolio2 = []
+            var portfolio3 = []
             for (var portfolio in res) {
+              var key = portfolio
               var curr_value = portfolio
               if (curr_value === "low_risk") {
-                for (var key in res[curr_value]) {
-                  var month = key
-                  var value = res[curr_value][key]
-                  portfolio1[month] = value
+                for (var timekey in res[key]) {
+                  var time = timekey
+                  for (var timePoint in res[key][timekey]) {
+                    var new_dict = {}
+                    new_dict["x"] = timePoint
+                    new_dict["y"] = res[key][timekey][timePoint]
+                    portfolio1.push(new_dict)
+                  }
                 }
               }
               else {
                 if ((curr_value === "medium_risk")) {
-                  for (var key in res[curr_value]) {
-                    var month = key
-                    var value = res[curr_value][key]
-                    portfolio2[month] =  value
+                  for (var timekey in res[key]) {
+                    var time = timekey
+                    for (var timePoint in res[key][timekey]) {
+                      var new_dict = {}
+                      new_dict["x"] = timePoint
+                      new_dict["y"] = res[key][timekey][timePoint]
+                      portfolio2.push(new_dict)
+                    }
                   }
                 }
                 else {
-                  for (var key in res[curr_value]) {
-                    var month = key
-                    var value = res[curr_value][key]
-                    portfolio3[month]=  value
+                  for (var timekey in res[key]) {
+                    var time = timekey
+                    for (var timePoint in res[key][timekey]) {
+                      var new_dict = {}
+                      new_dict["x"] = timePoint
+                      new_dict["y"] = res[key][timekey][timePoint]
+                      portfolio3.push(new_dict)
+                    }
                   }
                 }
               }
@@ -171,11 +231,16 @@ class Data extends Component {
             console.log(this.state.port2)
             this.changePortfolio3(portfolio3);
             console.log(this.state.port3)
+            this.setState({step: 'performance'});
     }) .catch(function(error) {
-        console.log('There has been a problem: ' + error.message);
-        throw error;
+        console.log(error);
+        this.setState({step: 'form'});
     })
   };
+
+  backButton() {
+    this.setState({step: 'form'});
+  }
 
   handleTimeChange(event) {
     this.setState({time: event.target.value});
@@ -199,6 +264,9 @@ class Data extends Component {
   handleOnlineChange(event) {
     this.setState({online: event.target.value});
   }
+  handleSubmitChange() {
+    this.setState({submitted: true})
+  }
   changePortfolio1(port_dict) {
     this.setState({port1: port_dict })
   }
@@ -212,7 +280,7 @@ class Data extends Component {
     this.setState({baseline: port_dict})
   }
   changeProjection(port_dict) {
-    this.setState({baseline: port_dict})
+    this.setState({projection: port_dict})
   }
   
 
@@ -250,127 +318,436 @@ class Data extends Component {
   }
 
   render() {
-      const wellStyles = { maxWidth: 400, margin: '0 auto 10px' };
       const fontSize = 5;
-      return (
-        <section id="data">
-        <form onSubmit = {this._enterData}>
-          <div className="row education">
-            <div className="three columns header-col">
-                <h1><span>Time Span</span></h1>
+      if (this.state.step === "form") {
+        return (
+          <section id="data">
+          <form onSubmit = {this._enterData}>
+            <div className="row education">
+              <div className="three columns header-col">
+                  <h1><span>Time Span</span></h1>
+              </div>
+              
+                <div className="nine columns main-col">
+                    <div className="row item">
+                      <input type="text" defaultValue="" size="25" id="Time Span" name="Time Span" value={this.state.value} onChange={this.handleTimeChange}/>
+                    </div>
+                </div>
             </div>
-            
+
+
+            <div className="row work">
+
+              <div className="three columns header-col">
+                  <h1><span>Advertising</span></h1>
+              </div>
+
               <div className="nine columns main-col">
-                  <div className="row item">
-                    <input type="text" defaultValue="" size="25" id="Time Span" name="Time Span" value={this.state.value} onChange={this.handleTimeChange}/>
-                  </div>
-              </div>
-          </div>
-
-
-          <div className="row work">
-
-            <div className="three columns header-col">
-                <h1><span>Advertising</span></h1>
-            </div>
-
-            <div className="nine columns main-col">
-              <div className="row item">
-                <input value={this.state.value} onChange={this.handleAdvertisingChange} type="text" defaultValue="" size="25" id="Advertising Amount" name="Advertising Amount" o/>
+                <div className="row item">
+                  <input value={this.state.value} onChange={this.handleAdvertisingChange} type="text" defaultValue="" size="25" id="Advertising Amount" name="Advertising Amount" o/>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="row work">
+            <div className="row work">
 
-            <div className="three columns header-col">
-                <h1><span>Wages</span></h1>
-            </div>
+              <div className="three columns header-col">
+                  <h1><span>Wages</span></h1>
+              </div>
 
-            <div className="nine columns main-col">
-              <div className="row item">
-                <input value={this.state.value} onChange={this.handleWagesChange} type="text" defaultValue="" size="25" id="Wage Amount" name="Wage Amount" o/>
+              <div className="nine columns main-col">
+                <div className="row item">
+                  <input value={this.state.value} onChange={this.handleWagesChange} type="text" defaultValue="" size="25" id="Wage Amount" name="Wage Amount" o/>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="row work">
+            <div className="row work">
 
-            <div className="three columns header-col">
-                <h1><span>Fixed Costs</span></h1>
-            </div>
+              <div className="three columns header-col">
+                  <h1><span>Fixed Costs</span></h1>
+              </div>
 
-            <div className="nine columns main-col">
-              <div className="row item">
-                <input value={this.state.value} onChange={this.handleFixedChange} type="text" defaultValue="" size="25" id="Fixed Amount" name="Fixed Amount" o/>
+              <div className="nine columns main-col">
+                <div className="row item">
+                  <input value={this.state.value} onChange={this.handleFixedChange} type="text" defaultValue="" size="25" id="Fixed Amount" name="Fixed Amount" o/>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="row work">
+            <div className="row work">
 
-            <div className="three columns header-col">
-                <h1><span>Other Costs</span></h1>
-            </div>
+              <div className="three columns header-col">
+                  <h1><span>Other Costs</span></h1>
+              </div>
 
-            <div className="nine columns main-col">
-              <div className="row item">
-                <input value={this.state.value} onChange={this.handleOtherChange} type="text" defaultValue="" size="25" id="Other Amount" name="Other Amount" o/>
+              <div className="nine columns main-col">
+                <div className="row item">
+                  <input value={this.state.value} onChange={this.handleOtherChange} type="text" defaultValue="" size="25" id="Other Amount" name="Other Amount" o/>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="row work">
+            <div className="row work">
 
-            <div className="three columns header-col">
-                <h1><span>Sector</span></h1>
-            </div>
+              <div className="three columns header-col">
+                  <h1><span>Sector</span></h1>
+              </div>
 
-            <div className="nine columns main-col">
-              <div className="row item">
-                <input value={this.state.value} onChange={this.handleSectorChange} type="text" defaultValue="" size="25" id="Sector Amount" name="Sector Amount" o/>
-              </div>x
-            </div>
-          </div>
-
-          <div className="row work">
-
-            <div className="three columns header-col">
-                <h1><span>Online</span></h1>
-            </div>
-
-            <div className="nine columns main-col">
-              <div className="row item">
-                <input value={this.state.value} onChange={this.handleOnlineChange} type="text" defaultValue="" size="25" id="Online Amount" name="Online Amount" o/>
+              <div className="nine columns main-col">
+                <div className="row item">
+                  <input value={this.state.value} onChange={this.handleSectorChange} type="text" defaultValue="" size="25" id="Sector Amount" name="Sector Amount" o/>
+                </div>
               </div>
             </div>
-          </div>
 
+            <div className="row work">
 
-          <div className="row skill">
+              <div className="three columns header-col">
+                  <h1><span>Online</span></h1>
+              </div>
 
-            <div className="three columns header-col">
-                <h1><span>CSV File</span></h1>
+              <div className="nine columns main-col">
+                <div className="row item">
+                  <input value={this.state.value} onChange={this.handleOnlineChange} type="text" defaultValue="" size="25" id="Online Amount" name="Online Amount" o/>
+                </div>
+              </div>
             </div>
 
-            <div align="center" oncontextmenu="return false">
-              <br /><br /><br />
-              <div className="dropzone">
-                <Dropzone accept=".csv" onDropAccepted={this.onDrop.bind(this)}>            
-                </Dropzone>
+
+            <div className="row skill">
+
+              <div className="three columns header-col">
+                  <h1><span>CSV File</span></h1>
+              </div>
+
+              <div align="center" oncontextmenu="return false">
                 <br /><br /><br />
+                <div className="dropzone">
+                  <Dropzone accept=".csv" onDropAccepted={this.onDrop.bind(this)}>            
+                  </Dropzone>
+                  <br /><br /><br />
+                </div>
+                <h2>Upload or drop your <font size={fontSize} color="#00A4FF">CSV</font><br /> file here.</h2>
               </div>
-              <h2>Upload or drop your <font size={fontSize} color="#00A4FF">CSV</font><br /> file here.</h2>
             </div>
-          </div>
-          <input type="submit" value="Submit" />
-        </form>
 
-        {/* <section id="portfolio">
-          <Portfolio port1_dates = {this.state.port1}/>
-        </section> */}
-    </section>
+            <div className="row skill">
+
+              <div className="three columns header-col">
+                  <h1><span></span></h1>
+              </div>
+
+              <div className="nine columns main-col">
+                <div className="row item">
+                  <input align="center" type="submit" value="Submit" />                </div>
+              </div>
+            </div>
+          </form>
+      </section>
     );
+      }
+      else {
+        if (this.state.step === "loading") {
+          return (
+              <section id="data">
+              <form onSubmit = {this._enterData}>
+                <div className="row education">
+                  <div className="three columns header-col">
+                      <h1><span>Time Span</span></h1>
+                  </div>
+                  
+                    <div className="nine columns main-col">
+                        <div className="row item">
+                          <input type="text" defaultValue="" size="25" id="Time Span" name="Time Span" value={this.state.value} onChange={this.handleTimeChange}/>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div className="row work">
+
+                  <div className="three columns header-col">
+                      <h1><span>Advertising</span></h1>
+                  </div>
+
+                  <div className="nine columns main-col">
+                    <div className="row item">
+                      <input value={this.state.value} onChange={this.handleAdvertisingChange} type="text" defaultValue="" size="25" id="Advertising Amount" name="Advertising Amount" o/>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="row work">
+
+                  <div className="three columns header-col">
+                      <h1><span>Wages</span></h1>
+                  </div>
+
+                  <div className="nine columns main-col">
+                    <div className="row item">
+                      <input value={this.state.value} onChange={this.handleWagesChange} type="text" defaultValue="" size="25" id="Wage Amount" name="Wage Amount" o/>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="row work">
+
+                  <div className="three columns header-col">
+                      <h1><span>Fixed Costs</span></h1>
+                  </div>
+
+                  <div className="nine columns main-col">
+                    <div className="row item">
+                      <input value={this.state.value} onChange={this.handleFixedChange} type="text" defaultValue="" size="25" id="Fixed Amount" name="Fixed Amount" o/>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="row work">
+
+                  <div className="three columns header-col">
+                      <h1><span>Other Costs</span></h1>
+                  </div>
+
+                  <div className="nine columns main-col">
+                    <div className="row item">
+                      <input value={this.state.value} onChange={this.handleOtherChange} type="text" defaultValue="" size="25" id="Other Amount" name="Other Amount" o/>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="row work">
+
+                  <div className="three columns header-col">
+                      <h1><span>Sector</span></h1>
+                  </div>
+
+                  <div className="nine columns main-col">
+                    <div className="row item">
+                      <input value={this.state.value} onChange={this.handleSectorChange} type="text" defaultValue="" size="25" id="Sector Amount" name="Sector Amount" o/>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="row work">
+
+                  <div className="three columns header-col">
+                      <h1><span>Online</span></h1>
+                  </div>
+
+                  <div className="nine columns main-col">
+                    <div className="row item">
+                      <input value={this.state.value} onChange={this.handleOnlineChange} type="text" defaultValue="" size="25" id="Online Amount" name="Online Amount" o/>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div className="row skill">
+
+                  <div className="three columns header-col">
+                      <h1><span>CSV File</span></h1>
+                  </div>
+
+                  <div align="center" oncontextmenu="return false">
+                    <br /><br /><br />
+                    <div className="dropzone">
+                      <Dropzone accept=".csv" onDropAccepted={this.onDrop.bind(this)}>            
+                      </Dropzone>
+                      <br /><br /><br />
+                    </div>
+                    <h2>Upload or drop your <font size={fontSize} color="#00A4FF">CSV</font><br /> file here.</h2>
+                  </div>
+                </div>
+
+              <div className="row skill">
+
+                <div className="three columns header-col">
+                    <h1><span></span></h1>
+                </div>
+
+                  <div className="nine columns main-col">
+                    <div className="row item">
+                      <input align="center" type="submit" value="Submit" />   
+                      <br />
+              <br />
+              <br />
+              <br />
+              {/* <Row> */}
+                {/* <Col med='5' />
+                <Col med='2'> */}
+                  <ReactLoading align="center" type='spin' color='#0984e3'/>
+                  <br />
+                  <p style={{width: 230, marginLeft: -80}}>Finding investments right for you</p>
+                {/* </Col>
+                <Col med='5' /> */}
+              {/* </Row> */}             
+                  </div>
+                </div>
+
+              </div>
+              </form>
+              
+          </section>
+          );
+      } else {
+        return (
+          <section id="data">
+          <form onSubmit = {this._enterData}>
+            <div className="row education">
+              <div className="three columns header-col">
+                  <h1><span>Time Span</span></h1>
+              </div>
+              
+                <div className="nine columns main-col">
+                    <div className="row item">
+                      <input type="text" defaultValue="" size="25" id="Time Span" name="Time Span" value={this.state.value} onChange={this.handleTimeChange}/>
+                    </div>
+                </div>
+            </div>
+
+
+            <div className="row work">
+
+              <div className="three columns header-col">
+                  <h1><span>Advertising</span></h1>
+              </div>
+
+              <div className="nine columns main-col">
+                <div className="row item">
+                  <input value={this.state.value} onChange={this.handleAdvertisingChange} type="text" defaultValue="" size="25" id="Advertising Amount" name="Advertising Amount" o/>
+                </div>
+              </div>
+            </div>
+
+            <div className="row work">
+
+              <div className="three columns header-col">
+                  <h1><span>Wages</span></h1>
+              </div>
+
+              <div className="nine columns main-col">
+                <div className="row item">
+                  <input value={this.state.value} onChange={this.handleWagesChange} type="text" defaultValue="" size="25" id="Wage Amount" name="Wage Amount" o/>
+                </div>
+              </div>
+            </div>
+
+            <div className="row work">
+
+              <div className="three columns header-col">
+                  <h1><span>Fixed Costs</span></h1>
+              </div>
+
+              <div className="nine columns main-col">
+                <div className="row item">
+                  <input value={this.state.value} onChange={this.handleFixedChange} type="text" defaultValue="" size="25" id="Fixed Amount" name="Fixed Amount" o/>
+                </div>
+              </div>
+            </div>
+
+            <div className="row work">
+
+              <div className="three columns header-col">
+                  <h1><span>Other Costs</span></h1>
+              </div>
+
+              <div className="nine columns main-col">
+                <div className="row item">
+                  <input value={this.state.value} onChange={this.handleOtherChange} type="text" defaultValue="" size="25" id="Other Amount" name="Other Amount" o/>
+                </div>
+              </div>
+            </div>
+
+            <div className="row work">
+
+              <div className="three columns header-col">
+                  <h1><span>Sector</span></h1>
+              </div>
+
+              <div className="nine columns main-col">
+                <div className="row item">
+                  <input value={this.state.value} onChange={this.handleSectorChange} type="text" defaultValue="" size="25" id="Sector Amount" name="Sector Amount" o/>
+                </div>
+              </div>
+            </div>
+
+            <div className="row work">
+
+              <div className="three columns header-col">
+                  <h1><span>Online</span></h1>
+              </div>
+
+              <div className="nine columns main-col">
+                <div className="row item">
+                  <input value={this.state.value} onChange={this.handleOnlineChange} type="text" defaultValue="" size="25" id="Online Amount" name="Online Amount" o/>
+                </div>
+              </div>
+            </div>
+
+
+            <div className="row skill">
+
+              <div className="three columns header-col">
+                  <h1><span>CSV File</span></h1>
+              </div>
+
+              <div align="center" oncontextmenu="return false">
+                <br /><br /><br />
+                <div className="dropzone">
+                  <Dropzone accept=".csv" onDropAccepted={this.onDrop.bind(this)}>            
+                  </Dropzone>
+                  <br /><br /><br />
+                </div>
+                <h2>Upload or drop your <font size={fontSize} color="#00A4FF">CSV</font><br /> file here.</h2>
+              </div>
+            </div>
+            <input align="center" type="submit" value="Submit" />
+          </form>
+          <section id = "results">
+            <ApexChart baseline = {this.state.baseline} projection = {this.state.projection} portfolio1 = {this.state.port1} portfolio2 = {this.state.port2} portfolio3 = {this.state.port3}/>
+            <div className="row work">
+
+              <div className="three columns header-col">
+                  <h1><span>Low Risk Portfolio: </span></h1>
+              </div>
+
+              <div className="nine columns main-col">
+                <div className="row item">
+                  <h2><span>TDTF + BIV + PZA</span></h2>
+                </div>
+              </div>
+            </div>
+            <div className="row work">
+
+              <div className="three columns header-col">
+                  <h1><span>Medium Risk Portfolio: </span></h1>
+              </div>
+
+              <div className="nine columns main-col">
+                <div className="row item">
+                  <h2><span>GOOGL + URI + MSFT</span></h2>
+                </div>
+              </div>
+            </div>
+            <div className="row work">
+
+              <div className="three columns header-col">
+                  <h1><span>High Risk Portfolio: </span></h1>
+              </div>
+
+              <div className="nine columns main-col">
+                <div className="row item">
+                  <h2><span>AMZN + NVDA + AAPL</span></h2>
+                </div>
+              </div>
+            </div>
+          </section>
+      </section>
+    );
+      }
+    } 
   }
 }
 

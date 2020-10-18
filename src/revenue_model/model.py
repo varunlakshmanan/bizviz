@@ -64,14 +64,14 @@ def extrapolate_costs(X, time):
     advertising_slope = (float(X['advertising'].iloc[-1]) - float(X['advertising'].iloc[0])) / float(len(X['advertising']))
     advertising_extrapolation = float(X['advertising'].iloc[-1]) + (float(time) * advertising_slope)
     wages_slope = (float(X['wages'].iloc[-1]) - float(X['wages'].iloc[0])) / float(len(X['wages']))
-    wages_extrapolation = X['wages'].iloc[-1] + (float(time) * wages_slope)
+    wages_extrapolation = float(X['wages'].iloc[-1]) + (float(time) * wages_slope)
     fixed_costs_slope = (float(X['fixed_costs'].iloc[-1]) - float(X['fixed_costs'].iloc[0])) / float(len(X['fixed_costs']))
-    fixed_costs_extrapolation = X['fixed_costs'].iloc[-1] + (float(time) * fixed_costs_slope)
+    fixed_costs_extrapolation = float(X['fixed_costs'].iloc[-1]) + (float(time) * fixed_costs_slope)
     other_costs_slope = (float(X['other_costs'].iloc[-1]) - float(X['other_costs'].iloc[0])) / float(len(X['other_costs']))
-    other_costs_extrapolation = X['other_costs'].iloc[-1] + (float(time) * other_costs_slope)
-    online_extrapolation = X['advertising'].iloc[-1]
+    other_costs_extrapolation = float(X['other_costs'].iloc[-1]) + (float(time) * other_costs_slope)
+    online_extrapolation = float(X['advertising'].iloc[-1])
     sector_slope = (float(X['sector'].iloc[-1]) - float(X['sector'].iloc[0])) / float(len(X['sector']))
-    sector_extrapolation = X['sector'].iloc[-1] + (float(time) * sector_slope)
+    sector_extrapolation = float(X['sector'].iloc[-1]) + (float(time) * sector_slope)
     if online_extrapolation == 'online':
         physical_extrapolation = 0
     else:
@@ -88,7 +88,7 @@ def extrapolate_costs(X, time):
     return extrapolated_data
 
 
-def predict(file_path, sector, advertising, wages, fixed_costs, other_costs, online, time, timeout=3):
+def predict(file_path, sector, advertising, wages, fixed_costs, other_costs, online, time, timeout=1):
     advertising = float(advertising)
     wages = float(wages)
     fixed_costs = float(fixed_costs)
@@ -99,5 +99,6 @@ def predict(file_path, sector, advertising, wages, fixed_costs, other_costs, onl
     if time == 1:
         return float(model.predict(test)[0])
     else:
+        print(float(model.predict(extrapolate_costs(X, time))[0]))
         return float(model.predict(extrapolate_costs(X, time))[0])
 

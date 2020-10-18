@@ -75,7 +75,8 @@ def get_estimated_revenue():
         'baseline': baseline,
         'projection': projection
     }
-    return jsonify(dict)
+    print(dict)
+    return (dict)
 
 
 @app.route('/getStockData', methods=['POST'])
