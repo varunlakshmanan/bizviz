@@ -38,8 +38,8 @@ def get_estimated_revenue():
     for i in range(0, len(month_year)):
         # baseline[month_year[i]] = data['revenue'][i + 1]
         temp_dict = {}
-        temp_dict[baseline[month_year[i]]] = data['revenue'][i + 1]
-        baseline[i] = temp_dict
+        temp_dict[month_year[i]] = data['revenue'][i + 1]
+        baseline.append(temp_dict)
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     last_month = data['month'].iloc[-1]
     next_month = months[(months.index(last_month) + 1) % 12]
@@ -57,7 +57,6 @@ def get_estimated_revenue():
 
     projected_revenue = str(predict(file_path, sector, advertising, wages, fixed_costs, other_costs, online, time))
     projection = {next_month_year: projected_revenue}
-
 
     dict = {
         'baseline': baseline,
