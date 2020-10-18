@@ -78,6 +78,7 @@ def get_money(stock_list, list_of_prices, money):
     #divides money evenly among stocks
     stock_money = money / len(stock_list)
     dict = {}
+    list = []
     count = 0
     # today = datetime.datetime.now()
     # today = today.strftime("%Y-%m-%d")
@@ -101,7 +102,11 @@ def get_money(stock_list, list_of_prices, money):
                 dict[date] = uprice
             #i+=1
         count+=1
-    return dict
+    for key, value in dict.items():
+        new_dict={}
+        new_dict[key] = value
+        list.append(new_dict)
+    return list
 
 #num_of_months = 5
 # low_risk_stock_list = ['TDTF', 'BIV', 'PZA']
@@ -110,5 +115,5 @@ def get_money(stock_list, list_of_prices, money):
 #list_of_prices = get_list_of_prices(high_risk_stock_list, num_of_months)
 #print(list_of_prices)
 #temp_list = [{'2020-11-01': 444.58105600107984, '2020-12-01': 476.3930626472659, '2021-01-01': 513.7873154199672, '2021-02-01': 551.9584350369109, '2021-03-01': 576.6159015623272}, {'2020-11-01': 3314.3813289361915, '2020-12-01': 3403.458750136123, '2021-01-01': 3471.237244499922, '2021-02-01': 3643.584211818914, '2021-03-01': 3689.151627413864}, {'2020-11-01': 549.3280722258825, '2020-12-01': 562.9468660336015, '2021-01-01': 587.3330001816589, '2021-02-01': 609.6957059514913, '2021-03-01': 621.3325014357209}, {'2020-11-01': 123.39610206550843, '2020-12-01': 124.17790857381368, '2021-01-01': 127.15492871073009, '2021-02-01': 131.13093697525866, '2021-03-01': 131.60752995602556}]
-#money = get_money(high_risk_stock_list, list_of_prices, 50)
+#money = get_money(high_risk_stock_list, temp_list, 50)
 #print(money)

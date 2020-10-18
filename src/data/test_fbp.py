@@ -88,6 +88,7 @@ def get_money(stock_list, list_of_prices, money):
     #divides money evenly among stocks
     stock_money = money / len(stock_list)
     dict = {}
+    list = []
     date = '11-01-2019 GMT'
     dict[date] = 12107.97
     count = 0
@@ -117,7 +118,11 @@ def get_money(stock_list, list_of_prices, money):
                 dict[date] = uprice
             #i+=1
         count+=1
-    return dict
+    for key, value in dict.items():
+        new_dict={}
+        new_dict[key] = value
+        list.append(new_dict)
+    return list
 
 #num_of_months = 5
 # low_risk_stock_list = ['TDTF', 'BIV', 'PZA']
