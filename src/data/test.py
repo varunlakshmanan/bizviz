@@ -14,7 +14,7 @@ from dateutil.relativedelta import relativedelta
 
 
 time = 4
-money = 40
+money = 13800
 dict = {}
 low_risk_stock_list = ['TDTF', 'BIV', 'PZA']
 medium_risk_stock_list = ['GOOGL', 'URI', 'MSFT']
