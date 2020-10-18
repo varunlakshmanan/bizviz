@@ -18,15 +18,15 @@ def get_list_of_prices(stock_list, num_of_months):
         new_names = ['ds', 'y']
         old_names = stock_data.columns[col_indices]
         stock_data.rename(columns=dict(zip(old_names, new_names)), inplace=True)
-        print(stock_data)
+        #print(stock_data)
         stock_data = stock_data.filter(items=['ds', 'y'])
-        print(stock_data)
+        #print(stock_data)
         model = Prophet(daily_seasonality=False, weekly_seasonality=False, yearly_seasonality=True, changepoint_prior_scale=0.05, changepoints=None)
         model.add_seasonality(name='monthly', period=30.5, fourier_order=5)
         model.fit(stock_data)
 
         #makes prediction one year in advance
-        future_data = model.make_future_dataframe(periods=200)
+        future_data = model.make_future_dataframe(periods=((num_of_months+1)*30))
         forecast = model.predict(future_data)
         forecasted_price = forecast[['ds', 'yhat']]
         today = datetime.datetime.now()
@@ -65,11 +65,11 @@ def get_money(stock_list, list_of_prices, money):
         count+=1
     return dict
 
-num_of_months = 5
+#num_of_months = 10
 # low_risk_stock_list = ['TDTF', 'BIV', 'PZA']
-medium_risk_stock_list = ['GOOGL', 'URI', 'MSFT']
+#medium_risk_stock_list = ['GOOGL', 'URI', 'MSFT']
 # high_risk_stock_list = ['TSLA', 'AMZN', 'NVDA', 'AAPL']
-list_of_prices = get_list_of_prices(medium_risk_stock_list, num_of_months)
+#list_of_prices = get_list_of_prices(medium_risk_stock_list, num_of_months)
 # print(list_of_prices)
-money = get_money(medium_risk_stock_list, list_of_prices, 50)
-print(money)
+#money = get_money(medium_risk_stock_list, list_of_prices, 50)
+#print(money)
