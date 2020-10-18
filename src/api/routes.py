@@ -3,8 +3,9 @@ from flask import request, jsonify
 from flask_cors import CORS, cross_origin
 from src.revenue_model.model import predict
 from src.ibm_api.stock_data import get_stock_data_yf
-from src.data.fbp import get_list_of_prices,get_money
+from src.data.fbp import get_list_of_prices,get_money,predict_price
 import pandas as pd
+import pickle
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -43,7 +44,7 @@ def get_estimated_revenue():
 #     X['advertising'].iloc[-1]
 #     dict['']
 
-@app.route('/getStockData', methods=['GET'])
+@app.route('/getStockData', methods=['POST'])
 def get_stock_data():
     file_path = request.json['file_path']
     sector = request.json['sector']
@@ -56,23 +57,44 @@ def get_stock_data():
 
     time = int(time)
     money = advertising + wages + fixed_costs + other_costs
-    list = []
+    dict = {}
     low_risk_stock_list = ['TDTF', 'BIV', 'PZA']
     medium_risk_stock_list = ['GOOGL', 'URI', 'MSFT']
     high_risk_stock_list = ['TSLA', 'AMZN', 'NVDA', 'AAPL']
-    get_stock_data_yf(low_risk_stock_list)
-    list_of_prices = get_list_of_prices(low_risk_stock_list, time)
+    # get_stock_data_yf(low_risk_stock_list)
+    list_of_prices = []
+    for stock in low_risk_stock_list:
+        with open('../models/'+stock+'.pkl', 'rb') as f:
+            model = pickle.load(f)
+        list_of_projected = predict_price(stock, model, time)
+        list_of_prices.append(list_of_projected)
     low_risk = get_money(stock_list=low_risk_stock_list, list_of_prices=list_of_prices, money=money)
-    list.append(low_risk)
-    get_stock_data_yf(medium_risk_stock_list)
-    list_of_prices = get_list_of_prices(medium_risk_stock_list, time)
+    dict['low_risk'] = low_risk
+    list_of_prices = []
+    for stock in medium_risk_stock_list:
+        with open('../models/' + stock + '.pkl', 'rb') as f:
+            model = pickle.load(f)
+        list_of_projected = predict_price(stock, model, time)
+        list_of_prices.append(list_of_projected)
     medium_risk = get_money(stock_list=medium_risk_stock_list, list_of_prices=list_of_prices, money=money)
-    list.append(medium_risk)
-    get_stock_data_yf(high_risk_stock_list)
-    list_of_prices = get_list_of_prices(high_risk_stock_list, time)
+    dict['medium_risk'] = medium_risk
+    # get_stock_data_yf(medium_risk_stock_list)
+    # list_of_prices = get_list_of_prices(medium_risk_stock_list, time)
+    # medium_risk = get_money(stock_list=medium_risk_stock_list, list_of_prices=list_of_prices, money=money)
+    # dict['medium_risk'] = medium_risk
+    list_of_prices = []
+    for stock in high_risk_stock_list:
+        with open('../models/' + stock + '.pkl', 'rb') as f:
+            model = pickle.load(f)
+        list_of_projected = predict_price(stock, model, time)
+        list_of_prices.append(list_of_projected)
     high_risk = get_money(stock_list=high_risk_stock_list, list_of_prices=list_of_prices, money=money)
-    list.append(high_risk)
-    return list
+    dict['high_risk'] = high_risk
+    # get_stock_data_yf(high_risk_stock_list)
+    # list_of_prices = get_list_of_prices(high_risk_stock_list, time)
+    # high_risk = get_money(stock_list=high_risk_stock_list, list_of_prices=list_of_prices, money=money)
+    # dict['high_risk'] = high_risk
+    return dict
 
 if __name__ == '__main__':
     app.run()
