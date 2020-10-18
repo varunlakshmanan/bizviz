@@ -7,7 +7,7 @@
 ![React](https://img.icons8.com/ios/150/000000/react-native.png)
 ![Flask](https://www.olirowan.xyz/static/images/icons/flask-plain.svg)
 ![IBM Watson](https://github.com/varunlakshmanan/hackgt7/blob/main/watson3.png)
-![SciKitLearn]()
+![SciKitLearn](https://github.com/varunlakshmanan/hackgt7/blob/main/sklearn.png)
 
 ## How it works ##
 
