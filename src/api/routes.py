@@ -94,7 +94,7 @@ def get_stock_data():
     dict = {}
     low_risk_stock_list = ['TDTF', 'BIV', 'PZA']
     medium_risk_stock_list = ['GOOGL', 'URI', 'MSFT']
-    high_risk_stock_list = ['TSLA', 'AMZN', 'NVDA', 'AAPL']
+    high_risk_stock_list = ['AMZN', 'NVDA', 'AAPL']
     # get_stock_data_yf(low_risk_stock_list)
     list_of_prices = []
     for stock in low_risk_stock_list:
