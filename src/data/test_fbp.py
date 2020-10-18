@@ -38,8 +38,8 @@ def get_list_of_prices(stock_list, num_of_months):
         start = datetime.datetime.strptime("Dec 1 2019", '%b %d %Y')
         today = datetime.datetime.now()
         diff_months = (today.year - start.year) * 12 + (today.month - start.month)
-        num_of_months += diff_months
-        for i in range(num_of_months):
+        months = num_of_months+diff_months
+        for i in range(months+1):
             future = start + relativedelta(months=i)
             tfuture_df = future
             tfuture = tfuture_df.strftime("%Y-%m-01")
@@ -88,6 +88,8 @@ def get_money(stock_list, list_of_prices, money):
     #divides money evenly among stocks
     stock_money = money / len(stock_list)
     dict = {}
+    date = '11-01-2019 GMT'
+    dict[date] = 12107.97
     count = 0
     today = datetime.datetime.now()
     today = today.strftime("%Y-%m-%d")

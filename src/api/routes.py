@@ -88,6 +88,7 @@ def get_stock_data():
     other_costs = float(request.json['other_costs'])
     online = request.json['online']
     time = request.json['time']
+    revenue = 12107.97
 
     time = int(time)
     money = advertising + wages + fixed_costs + other_costs
