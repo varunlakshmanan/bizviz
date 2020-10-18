@@ -6,6 +6,7 @@ from revenue_model.GlassRegressor import GlassRegressor
 
 def preprocess_data(file_path, sector, advertising, wages, fixed_costs, other_costs, online):
     data = pd.DataFrame(file_path)
+    data = data.iloc[1:]
     sectors = {  # from https://www.bls.gov/opub/mlr/2015/article/industry-employment-and-output-projections-to-2024.htm
         'Mining': 0.9,
         'Construction': 1.2,
@@ -30,6 +31,7 @@ def preprocess_data(file_path, sector, advertising, wages, fixed_costs, other_co
     data['sector'] = sectors[sector]
     features = ['advertising', 'wages', 'fixed_costs', 'other_costs', 'online', 'physical', 'sector']
     X = data[features]
+    print(X)
     y = data.revenue
 
     test_online = 0
@@ -53,15 +55,15 @@ def preprocess_data(file_path, sector, advertising, wages, fixed_costs, other_co
 
 def train_model(X, y, timeout):
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2)
+    X_train.to_csv("test.csv")
     model = GlassRegressor()
     model.fit(X_train, y_train, X_val, y_val, timeout, max_in_ensemble=4)
     return model
 
-
 def extrapolate_costs(X, time):
-    advertising_slope = (X['advertising'].iloc[-1] - X['advertising'].iloc[0]) / len(X['advertising'])
-    advertising_extrapolation = X['advertising'].iloc[-1] + (time * advertising_slope)
-    wages_slope = (X['wages'].iloc[-1] - X['wages'].iloc[0]) / len(X['wages'])
+    advertising_slope = (float(X['advertising'].iloc[-1]) - float(X['advertising'].iloc[0])) / len(X['advertising'])
+    advertising_extrapolation = float(X['advertising'].iloc[-1]) + (time * advertising_slope)
+    wages_slope = (float(X['wages'].iloc[-1]) - X['wages'].iloc[0]) / len(X['wages'])
     wages_extrapolation = X['wages'].iloc[-1] + (time * wages_slope)
     fixed_costs_slope = (X['fixed_costs'].iloc[-1] - X['fixed_costs'].iloc[0]) / len(X['fixed_costs'])
     fixed_costs_extrapolation = X['fixed_costs'].iloc[-1] + (time * fixed_costs_slope)

@@ -645,19 +645,19 @@ def optimize_hyperparams(estimators, x, y, timeout):
             estimator.set_params(**study.best_params)
             estimator.fit(x, y)
             optimized_estimators.append(estimator)
-        elif "XGB" in str(estimator):
-            optuna.logging.set_verbosity(verbosity=optuna.logging.CRITICAL)
-            study = optuna.create_study(direction="maximize")
-            study.optimize(lambda trial: xgb_objective(trial, x, y, estimator), timeout=timeout)
-            estimator.set_params(**study.best_params)
-            estimator.fit(x, y)
-            optimized_estimators.append(estimator)
-        elif "LGBM" in str(estimator):
-            optuna.logging.set_verbosity(verbosity=optuna.logging.CRITICAL)
-            study = optuna.create_study(direction="maximize")
-            study.optimize(lambda trial: lgbm_objective(trial, x, y, estimator), timeout=timeout)
-            estimator.set_params(**study.best_params)
-            estimator.fit(x, y)
-            optimized_estimators.append(estimator)
+        # elif "XGB" in str(estimator):
+        #     optuna.logging.set_verbosity(verbosity=optuna.logging.CRITICAL)
+        #     study = optuna.create_study(direction="maximize")
+        #     study.optimize(lambda trial: xgb_objective(trial, x, y, estimator), timeout=timeout)
+        #     estimator.set_params(**study.best_params)
+        #     estimator.fit(x, y)
+        #     optimized_estimators.append(estimator)
+        # elif "LGBM" in str(estimator):
+        #     optuna.logging.set_verbosity(verbosity=optuna.logging.CRITICAL)
+        #     study = optuna.create_study(direction="maximize")
+        #     study.optimize(lambda trial: lgbm_objective(trial, x, y, estimator), timeout=timeout)
+        #     estimator.set_params(**study.best_params)
+        #     estimator.fit(x, y)
+        #     optimized_estimators.append(estimator)
 
     return optimized_estimators

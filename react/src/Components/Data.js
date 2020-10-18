@@ -6,6 +6,7 @@ import FormLabel from 'react-bootstrap/FormLabel';
 import ReactFileReader from './ReactFileReader';
 import Chart from 'chart.js';
 import Dropzone from 'react-dropzone';
+import Portfolio from './Portfolio';
 import csv from 'csv';
 
 class Data extends Component {
@@ -37,7 +38,7 @@ class Data extends Component {
       file: null,
       baseline: null, 
       projection: null,
-      port1: null, 
+      port1: {1: "5", 2:"7"}, 
       port2: null, 
       port3: null
     }
@@ -181,16 +182,16 @@ class Data extends Component {
   }
 
   handleAdvertisingChange(event) {
-    this.setState({advertising: event.target.value});
+    this.setState({advertising: parseFloat(event.target.value)});
   }
   handleWagesChange(event) {
-    this.setState({wages: event.target.value});
+    this.setState({wages: parseFloat(event.target.value)});
   }
   handleFixedChange(event) {
-    this.setState({fixed_costs: event.target.value});
+    this.setState({fixed_costs: parseFloat(event.target.value)});
   }
   handleOtherChange(event) {
-    this.setState({other_costs: event.target.value});
+    this.setState({other_costs: parseFloat(event.target.value)});
   }
   handleSectorChange(event) {
     this.setState({sector: event.target.value});
@@ -364,6 +365,10 @@ class Data extends Component {
           </div>
           <input type="submit" value="Submit" />
         </form>
+
+        {/* <section id="portfolio">
+          <Portfolio port1_dates = {this.state.port1}/>
+        </section> */}
     </section>
     );
   }

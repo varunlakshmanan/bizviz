@@ -2,33 +2,16 @@ import React, { Component } from 'react';
 import ApexChart from './ApexChart';
 
 class Portfolio extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      port1_dates: props.port1_dates
+    }
+  }
   render() {
 
-    if (this.props.data) {
-      var projects = this.props.data.projects.map(function (projects) {
-        var projectImage = 'images/portfolio/' + projects.image;
-        
-        return (
-          <div key={projects.title} className="columns portfolio-item">
-            <div className="item-wrap">
-              <a href={projects.url} title={projects.title}>
-                <img alt={projects.title} src={projectImage} />
-                <div className="overlay">
-                  <div className="portfolio-item-meta">
-                    <h5>{projects.title}</h5>
-                    <p>{projects.category}</p>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-        )
-      })
-    } 
-
     return (
-      <section id="portfolio">
-
+      <div>
         <div className="row">
 
           <div className="twelve columns collapsed">
@@ -37,8 +20,8 @@ class Portfolio extends Component {
 
           </div>
         </div>
-        <ApexChart/>
-      </section>
+        <ApexChart port1_dates = {this.state.port1_dates}/>
+      </div>
     );
   }
 }
