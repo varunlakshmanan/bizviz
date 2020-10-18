@@ -48,10 +48,10 @@ import datetime
 # dict['high_risk'] = high_risk
 # print(dict)
 
-curr_string = "March 2017"
+curr_string = "December 2020"
 curr_string = "1 " + curr_string
 print(curr_string)
 d = datetime.datetime.strptime(curr_string, '%d %B %Y')
-s = datetime.datetime.strftime(d, '%m-%d-%Y')
-s += " GMT"
-print(s)
+curr_string = datetime.datetime.strftime(d, '%m-%d-%Y')
+curr_string += " GMT"
+print(curr_string)

@@ -61,6 +61,10 @@ def get_estimated_revenue():
     time = float(time)
 
     projected_revenue = str(predict(file_path, sector, advertising, wages, fixed_costs, other_costs, online, time))
+    today = "1 " + next_month_year
+    d = datetime.datetime.strptime(today, '%d %B %Y')
+    next_month_year = datetime.datetime.strftime(d, '%m-%d-%Y')
+    next_month_year += " GMT"
     projection = {next_month_year: projected_revenue}
 
     dict = {
