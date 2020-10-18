@@ -17,8 +17,8 @@ def get_IAMP_token(API_KEY):
     return IAM_access_token
 
 def model(token):
-    wml_credentials = {"url": "https://us-south.ml.cloud.ibm.com", "instance_id" : "wml_local", 'username':'ppusarla3@gatech.edu', 'password': "hf3729hggn29ghD", "version" : "3.0.0"}
-    client = ibm_watson_machine_learning.APIClient(wml_credentials)
+    wml_credentials = {"url": "https://us-south.ml.cloud.ibm.com", "apikey": API_KEY}
+    #client = ibm_watson_machine_learning.APIClient(wml_credentials)
     # print("Bob")
     # space_id = os.environ['IBM_space_id']
     # client.set.default_space(space_id)

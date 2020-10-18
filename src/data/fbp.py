@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 #from yahoo_finance import Share
 import yfinance as yf
 import pickle
+import stockquotes
 
 def get_list_of_prices(stock_list, num_of_months):
     df = pd.read_csv('../data/stock_data.csv')
@@ -65,8 +66,11 @@ def get_money(stock_list, list_of_prices, money):
     today = today.strftime("%Y-%m-%d")
     for stock in stock_list:
         # share = Share(stock)
-        stock_price = yf.download(stock, start=today, end=today)
-        stock_price = stock_price['Open'].values[0]
+        #stock_price = yf.download(stock, start=today, end=today)
+        stock_obj = stockquotes.Stock(stock)
+        stock_price = stock_obj.current_price
+        # stock_price = stock_price['Open'].values[0]
+        #print(stock_price)
         num_of_shares = stock_money / float(stock_price)
         list_of_stock = list_of_prices[count]
         i = 1
@@ -86,6 +90,6 @@ def get_money(stock_list, list_of_prices, money):
 #medium_risk_stock_list = ['GOOGL', 'URI', 'MSFT']
 #high_risk_stock_list = ['TSLA', 'AMZN', 'NVDA', 'AAPL']
 #list_of_prices = get_list_of_prices(high_risk_stock_list, num_of_months)
-# print(list_of_prices)
+#print(list_of_prices)
 #money = get_money(high_risk_stock_list, list_of_prices, 50)
-# print(money)
+#print(money)
