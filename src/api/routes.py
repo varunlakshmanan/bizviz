@@ -6,6 +6,7 @@ from src.ibm_api.stock_data import get_stock_data_yf
 from src.data.fbp import get_list_of_prices,get_money,predict_price
 import pandas as pd
 import pickle
+import datetime
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -38,7 +39,11 @@ def get_estimated_revenue():
     for i in range(0, len(month_year)):
         # baseline[month_year[i]] = data['revenue'][i + 1]
         temp_dict = {}
-        temp_dict[month_year[i]] = data['revenue'][i + 1]
+        curr_date = "1 " + month_year[i]
+        d = datetime.datetime.strptime(curr_date, '%d %B %Y')
+        s = datetime.datetime.strftime(d, '%m-%d-%Y')
+        s += " GMT"
+        temp_dict[s] = data['revenue'][i + 1]
         baseline.append(temp_dict)
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     last_month = data['month'].iloc[-1]
