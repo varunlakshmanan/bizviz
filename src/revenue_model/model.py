@@ -31,7 +31,6 @@ def preprocess_data(file_path, sector, advertising, wages, fixed_costs, other_co
     data['sector'] = sectors[sector]
     features = ['advertising', 'wages', 'fixed_costs', 'other_costs', 'online', 'physical', 'sector']
     X = data[features]
-    print(X)
     y = data.revenue
 
     test_online = 0
@@ -40,13 +39,13 @@ def preprocess_data(file_path, sector, advertising, wages, fixed_costs, other_co
         test_online = 1
         test_physical = 0
     test = pd.DataFrame(data={
-        'advertising': advertising,
-        'wages': wages,
-        'fixed_costs': fixed_costs,
-        'other_costs': other_costs,
-        'online': test_online,
-        'physical': test_physical,
-        'sector': sectors[sector]
+        'advertising': float(advertising),
+        'wages': float(wages),
+        'fixed_costs': float(fixed_costs),
+        'other_costs': float(other_costs),
+        'online': float(test_online),
+        'physical': float(test_physical),
+        'sector': float(sectors[sector])
     }, index=[0])
     scaler = RobustScaler()
     scaler.fit_transform(X)
@@ -60,31 +59,31 @@ def train_model(X, y, timeout):
     model.fit(X_train, y_train, X_val, y_val, timeout, max_in_ensemble=4)
     return model
 
+
 def extrapolate_costs(X, time):
-    advertising_slope = (float(X['advertising'].iloc[-1]) - float(X['advertising'].iloc[0])) / len(X['advertising'])
-    advertising_extrapolation = float(X['advertising'].iloc[-1]) + (time * advertising_slope)
-    wages_slope = (float(X['wages'].iloc[-1]) - X['wages'].iloc[0]) / len(X['wages'])
-    wages_extrapolation = X['wages'].iloc[-1] + (time * wages_slope)
-    fixed_costs_slope = (X['fixed_costs'].iloc[-1] - X['fixed_costs'].iloc[0]) / len(X['fixed_costs'])
-    fixed_costs_extrapolation = X['fixed_costs'].iloc[-1] + (time * fixed_costs_slope)
-    other_costs_slope = (X['other_costs'].iloc[-1] - X['other_costs'].iloc[0]) / len(X['other_costs'])
-    other_costs_extrapolation = X['other_costs'].iloc[-1] + (time * other_costs_slope)
+    advertising_slope = (float(X['advertising'].iloc[-1]) - float(X['advertising'].iloc[0])) / float(len(X['advertising']))
+    advertising_extrapolation = float(X['advertising'].iloc[-1]) + (float(time) * advertising_slope)
+    wages_slope = (float(X['wages'].iloc[-1]) - float(X['wages'].iloc[0])) / float(len(X['wages']))
+    wages_extrapolation = X['wages'].iloc[-1] + (float(time) * wages_slope)
+    fixed_costs_slope = (float(X['fixed_costs'].iloc[-1]) - float(X['fixed_costs'].iloc[0])) / float(len(X['fixed_costs']))
+    fixed_costs_extrapolation = X['fixed_costs'].iloc[-1] + (float(time) * fixed_costs_slope)
+    other_costs_slope = (float(X['other_costs'].iloc[-1]) - float(X['other_costs'].iloc[0])) / float(len(X['other_costs']))
+    other_costs_extrapolation = X['other_costs'].iloc[-1] + (float(time) * other_costs_slope)
     online_extrapolation = X['advertising'].iloc[-1]
-    sector_slope = (X['sector'].iloc[-1] - X['sector'].iloc[0]) / len(X['sector'])
-    sector_extrapolation = X['sector'].iloc[-1] + (time * sector_slope)
-    advertising_extrapolation, wages_extrapolation, fixed_costs_extrapolation, other_costs_extrapolation, online_extrapolation, sector_extrapolation
+    sector_slope = (float(X['sector'].iloc[-1]) - float(X['sector'].iloc[0])) / float(len(X['sector']))
+    sector_extrapolation = X['sector'].iloc[-1] + (float(time) * sector_slope)
     if online_extrapolation == 'online':
         physical_extrapolation = 0
     else:
         physical_extrapolation = 1
     extrapolated_data = pd.DataFrame(data={
-        'advertising': advertising_extrapolation,
-        'wages': wages_extrapolation,
-        'fixed_costs': fixed_costs_extrapolation,
-        'other_costs': other_costs_extrapolation,
-        'online': online_extrapolation,
-        'physical': physical_extrapolation,
-        'sector': sector_extrapolation
+        'advertising': float(advertising_extrapolation),
+        'wages': float(wages_extrapolation),
+        'fixed_costs': float(fixed_costs_extrapolation),
+        'other_costs': float(other_costs_extrapolation),
+        'online': float(online_extrapolation),
+        'physical': float(physical_extrapolation),
+        'sector': float(sector_extrapolation)
     }, index=[0])
     return extrapolated_data
 
@@ -98,7 +97,7 @@ def predict(file_path, sector, advertising, wages, fixed_costs, other_costs, onl
     X, y, test = preprocess_data(file_path, sector, advertising, wages, fixed_costs, other_costs, online)
     model = train_model(X, y, timeout)
     if time == 1:
-        return model.predict(test)[0]
+        return float(model.predict(test)[0])
     else:
-        return model.predict(extrapolate_costs(X, time))[0]
+        return float(model.predict(extrapolate_costs(X, time))[0])
 
