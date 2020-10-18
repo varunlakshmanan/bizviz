@@ -24,7 +24,7 @@ class Portfolio extends Component {
           </div>
         )
       })
-    }
+    } 
 
     return (
       <section id="portfolio">

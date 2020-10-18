@@ -27,7 +27,7 @@ class Header extends Component {
       <div className="row banner">
       
          <div className="banner-text">
-            <h1 className="responsive-headline">HackGT7 Project</h1>
+            <h1 className="responsive-headline">BizViz</h1>
             <h3>Made by Nishant Ravi, Varun Lakshmanan, Yash Patel, Pranav Pusarla.</h3>
             <hr />
             <ul className="social">

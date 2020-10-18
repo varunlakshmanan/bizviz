@@ -11,6 +11,21 @@ import csv from 'csv';
 class Data extends Component {
   constructor(props) {
     super(props);
+    this.months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ]
+
     this.state = {
       time: 10, 
       advertising: 0,
@@ -19,7 +34,12 @@ class Data extends Component {
       other_costs: 0,
       sector: 0,
       online: 0,
-      file: null
+      file: null,
+      baseline: null, 
+      projection: null,
+      port1: null, 
+      port2: null, 
+      port3: null
     }
     this.handleTimeChange = this.handleTimeChange.bind(this);
     this.handleAdvertisingChange = this.handleAdvertisingChange.bind(this);
@@ -28,6 +48,11 @@ class Data extends Component {
     this.handleOtherChange = this.handleOtherChange.bind(this);
     this.handleSectorChange = this.handleSectorChange.bind(this);
     this.handleOnlineChange = this.handleOnlineChange.bind(this);
+    this.changePortfolio1 = this.changePortfolio1.bind(this);
+    this.changePortfolio2 = this.changePortfolio2.bind(this);
+    this.changePortfolio3 = this.changePortfolio3.bind(this);
+    this.changeBaseline = this.changeBaseline.bind(this);
+    this.changeProjection = this.changeProjection.bind(this);
     this._enterData = this._enterData.bind(this);
   }
   _enterData(event) {
@@ -42,34 +67,7 @@ class Data extends Component {
           'sector':this.state.sector,
           'file_path': this.state.file
         })) 
-    // fetch("http://localhost:5000/getEstimatedRevenue", {
-    //     method: "POST",
-    //     headers : {
-    //       'Content-Type': 'application/json',
-    //       'accept':'application/json'
-    //     },
-    //     body : JSON.stringify({
-    //       'time': this.state.time,
-    //       'advertising': this.state.advertising,
-    //       'wages': this.state.wages,
-    //       'fixed_costs': this.state.fixed_costs,
-    //       'other_costs': this.state.other_costs,
-    //       'online': this.state.online,
-    //       'sector':this.state.sector,
-    //       'file_path': this.state.file
-    //     })
-    // }) .then(response => {
-    //     console.log(response.responseText)
-    //     console.log(response)
-    //     return response.json();
-    // }) .then(res => {
-    //         var result = res
-    //         console.log(result)
-    // }) .catch(function(error) {
-    //     console.log('There has been a problem: ' + error.message);
-    //     throw error;
-    // })
-    fetch("http://localhost:5000/getStockData", {
+    fetch("http://localhost:5000/getEstimatedRevenue", {
         method: "POST",
         headers : {
           'Content-Type': 'application/json',
@@ -90,12 +88,87 @@ class Data extends Component {
         console.log(response)
         return response.json();
     }) .then(res => {
-            var result = res
-            console.log(result)
+          var baseline = []
+          var projection = []
+          for (var key in res) {
+            var curr_value = key
+            if (key === "Baseline") {
+              for (var timekey in res[key]) {
+                var time = timekey
+                var value = res[key][timekey]
+                baseline.push(time, value)
+              }
+            }
+            else {
+              for (var timekey in res[key]) {
+                var time = timekey
+                var value = res[key][timekey]
+                projection.push(time, value)
+              }
+            }
+          }
+          this.changeBaseline(baseline);
+          this.changeProjection(projection);
     }) .catch(function(error) {
         console.log('There has been a problem: ' + error.message);
         throw error;
     })
+    // fetch("http://localhost:5000/getStockData", {
+    //     method: "POST",
+    //     headers : {
+    //       'Content-Type': 'application/json',
+    //       'accept':'application/json'
+    //     },
+    //     body : JSON.stringify({
+    //       'time': this.state.time,
+    //       'advertising': this.state.advertising,
+    //       'wages': this.state.wages,
+    //       'fixed_costs': this.state.fixed_costs,
+    //       'other_costs': this.state.other_costs,
+    //       'online': this.state.online,
+    //       'sector':this.state.sector,
+    //       'file_path': this.state.file
+    //     })
+    // }) .then(response => {
+    //     console.log(response)
+    //     return response.json();
+    // }) .then(res => {
+    //         var portfolio1 = []
+    //         var portfolio2 = []
+    //         var portfolio3 = []
+    //         for (var portfolio in res) {
+    //           var curr_value = portfolio
+    //           if (curr_value === "low_value") {
+    //             for (var key in res[curr_value]) {
+    //               var month = this.months[key - 1]
+    //               var value = res[curr_value][key]
+    //               portfolio1.push(month, value)
+    //             }
+    //           }
+    //           else {
+    //             if ((curr_value === "middle_value")) {
+    //               for (var key in res[curr_value]) {
+    //                 var month = this.months[key - 1]
+    //                 var value = res[curr_value][key]
+    //                 portfolio2.push(month, value)
+    //               }
+    //             }
+    //             else {
+    //               for (var key in res[curr_value]) {
+    //                 var month = this.months[key - 1]
+    //                 var value = res[curr_value][key]
+    //                 portfolio3.push(month, value)
+    //               }
+    //             }
+    //           }
+    //         }
+    //         this.changePortfolio1(portfolio1);
+    //         this.changePortfolio2(portfolio2);
+    //         this.changePortfolio3(portfolio3);
+    // }) .catch(function(error) {
+    //     console.log('There has been a problem: ' + error.message);
+    //     throw error;
+    // })
   };
 
   handleTimeChange(event) {
@@ -120,6 +193,21 @@ class Data extends Component {
   handleOnlineChange(event) {
     this.setState({online: event.target.value});
   }
+  changePortfolio1(port_dict) {
+    this.setState({port1: port_dict })
+  }
+  changePortfolio2(port_dict) {
+    this.setState({port2: port_dict })
+  }
+  changePortfolio3(port_dict) {
+    this.setState({port3: port_dict })
+  }
+  changeBaseline(port_dict) {
+    this.setState({baseline: port_dict})
+  }
+  changeProjection(port_dict) {
+    this.setState({baseline: port_dict})
+  }
   
 
   onDrop(files) {
@@ -135,14 +223,15 @@ class Data extends Component {
         var userList = [];
 
         for (var i = 0; i < data.length; i++) {
-          const month = data[i][0];
-          const advertising = data[i][1];
-          const wages = data[i][2];
-          const fixed_cost = data[i][3];
-          const other_cost = data[i][4];
-          const online = data[i][5];
-          const revenue = data[i][6];
-          const newUser = { "month": month, "advertising": advertising, "wages": wages, "fixed_cost": fixed_cost, "other_cost": other_cost, "online": online, "revenue": revenue};
+          const year = data[i][0];
+          const month = data[i][1];
+          const advertising = data[i][2];
+          const wages = data[i][3];
+          const fixed_cost = data[i][4];
+          const other_cost = data[i][5];
+          const online = data[i][6];
+          const revenue = data[i][7];
+          const newUser = { "year": year, "month": month, "advertising": advertising, "wages": wages, "fixed_cost": fixed_cost, "other_cost": other_cost, "online": online, "revenue": revenue};
           userList.push(newUser);
         };
         this.setState({file: userList})
@@ -234,7 +323,7 @@ class Data extends Component {
             <div className="nine columns main-col">
               <div className="row item">
                 <input value={this.state.value} onChange={this.handleSectorChange} type="text" defaultValue="" size="25" id="Sector Amount" name="Sector Amount" o/>
-              </div>
+              </div>x
             </div>
           </div>
 
