@@ -1,6 +1,6 @@
 # BizViz: Powering Small Businesses to Make the Best Financial Decisions :chart_with_upwards_trend: :dollar: #
 
-*HackGT 7 Hackathon Submission (Awarded Top 8 out of 175+ projects at HackGT 7)*
+*HackGT 7 Hackathon Submission (Awarded Top 8 out of 175+ projects at HackGT 7)* 🏆
 ### BizViz is a financial business visualization tool that gives small business owners insight into different ways to keep their business operating during difficult times like the COVID-19 global pandemic. Instead of having businesses collapse due to owners continuing to spend more money to keep themselves growing, our application takes that same monetary value and instead shows what would be a reasonable return if that money was invested into different types of stock market portfolios. All this data is then presented to the user to allow them to better gauge whether it would be worthwile to divert funds into investments while the pandemic is active to potentially make a profit to keep the business operating for longer.
 
 ## Some of the technologies we used include:
